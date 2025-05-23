@@ -71,7 +71,6 @@ fun Main(
     padding: PaddingValues,
     mainViewModel: MainViewModel,
     navigation: NavHostController,
-    db: AppDatabase,
     onNoteSelected: (Int) -> Unit,
     onDeleteClick: (Int) -> Unit, // ✅ исправлено
     onDeleteSelectedNote: (Int) -> Unit = {},

@@ -53,7 +53,6 @@ fun NotesAdaptiveScreen(
     padding: PaddingValues,
     mainViewModel: MainViewModel,
     watchViewModel: WatchViewModel,
-    db: AppDatabase,
     navigation: NavHostController,
     listState: LazyListState
 ) {
@@ -82,7 +81,6 @@ fun NotesAdaptiveScreen(
                     padding,
                     mainViewModel,
                     navigation,
-                    db = db,
                     onNoteSelected = { id -> selectedNoteId = id },
                     onDeleteClick = { deletedId ->
                         if (selectedNoteId == deletedId) {
@@ -192,7 +190,6 @@ fun NotesAdaptiveScreen(
                             padding,
                             watchViewModel,
                             navigation,
-                            db,
                             id = selectedNoteId,
                             listState
                         )
@@ -215,7 +212,6 @@ fun NotesAdaptiveScreen(
             padding,
             mainViewModel,
             navigation,
-            db = db,
             onNoteSelected = { id ->
                 navigation.navigate("${ScreenRoute.Watch.route}/$id")
             },

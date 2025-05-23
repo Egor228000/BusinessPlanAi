@@ -7,8 +7,10 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.AppDatabase
+import com.example.businessplanai.BusinessDao
 import com.example.businessplanai.BusinessEnity
 import com.itextpdf.io.font.FontProgramFactory
 import com.itextpdf.io.font.PdfEncodings
@@ -26,6 +28,7 @@ import com.vladsch.flexmark.ext.tables.TablesExtension
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.data.MutableDataSet
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,18 +37,22 @@ import org.w3c.dom.Node
 import org.xml.sax.InputSource
 import java.io.OutputStream
 import java.io.StringReader
+import javax.inject.Inject
 import javax.xml.parsers.DocumentBuilderFactory
 
-class WatchViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val businessDao = AppDatabase.getInstance(application).businessDao()
+
+@HiltViewModel
+class WatchViewModel @Inject constructor(private val dao: BusinessDao) : ViewModel() {
+
+
 
     private val _business = MutableStateFlow<BusinessEnity?>(null)
     val business: StateFlow<BusinessEnity?> = _business
 
     fun loadBusinessById(id: Int?) {
         viewModelScope.launch {
-            val result = businessDao.getId(id)
+            val result = dao.getId(id)
             _business.value = result
         }
     }

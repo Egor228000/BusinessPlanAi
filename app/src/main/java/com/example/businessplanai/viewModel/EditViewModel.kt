@@ -1,17 +1,25 @@
+package com.example.businessplanai.viewModel
+
+
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.AppDatabase
+import com.example.businessplanai.BusinessDao
 import com.example.businessplanai.BusinessEnity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class EditViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class EditViewModel @Inject constructor(private val dao: BusinessDao) : ViewModel() {
 
-    private val businessDao = AppDatabase.getInstance(application).businessDao()
+
 
     private val _business = MutableStateFlow<BusinessEnity?>(null)
     val business: StateFlow<BusinessEnity?> = _business
@@ -23,7 +31,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadBusinessById(id: Int?) {
         viewModelScope.launch {
-            val result = businessDao.getId(id)
+            val result = dao.getId(id)
             _business.value = result
             result?.let {
                 editedTitle.value = it.title
@@ -40,7 +48,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
         )
 
         viewModelScope.launch {
-            businessDao.insert(updated)
+            dao.insert(updated)
         }
     }
 }

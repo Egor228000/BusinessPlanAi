@@ -1,6 +1,5 @@
 package com.example.businessplanai.navHost
 
-import EditViewModel
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,8 +17,8 @@ import com.example.businessplanai.screens.EditPlan
 import com.example.businessplanai.screens.Main
 import com.example.businessplanai.screens.NotesAdaptiveScreen
 import com.example.businessplanai.screens.Watch
-
 import com.example.businessplanai.viewModel.AddViewModel
+import com.example.businessplanai.viewModel.EditViewModel
 import com.example.businessplanai.viewModel.MainViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
 
@@ -33,7 +32,6 @@ fun NavigationHost(
     addViewModel: AddViewModel,
     editViewModel: EditViewModel,
     watchViewModel: WatchViewModel,
-    db: AppDatabase,
     listState: LazyListState
 ) {
     NavHost(
@@ -46,7 +44,6 @@ fun NavigationHost(
                 padding = padding,
                 mainViewModel = mainViewModel,
                 navigation = navigation,
-                db = db,
                 onNoteSelected = { id ->
                     navigation.navigate("${ScreenRoute.Watch.route}/$id")
                 },
@@ -61,7 +58,6 @@ fun NavigationHost(
                 padding,
                 addViewModel,
                 navigation,
-                db
             )
         }
 
@@ -74,7 +70,6 @@ fun NavigationHost(
                 padding,
                 editViewModel,
                 navigation,
-                db,
                 id
             )
         }
@@ -87,7 +82,6 @@ fun NavigationHost(
                 padding,
                 watchViewModel,
                 navigation,
-                db,
                 id,
                 listState
             )
@@ -97,7 +91,6 @@ fun NavigationHost(
                 padding,
                 mainViewModel,
                 watchViewModel,
-                db,
                 navigation,
                 listState
             )

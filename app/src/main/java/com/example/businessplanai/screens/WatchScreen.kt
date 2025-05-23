@@ -34,7 +34,6 @@ fun Watch(
     padding: PaddingValues,
     watchViewModel: WatchViewModel,
     navigation: NavHostController,
-    db: AppDatabase,
     id: Int?,
     listState: LazyListState
 ) {

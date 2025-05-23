@@ -1,6 +1,5 @@
 package com.example.businessplanai.screens
 
-import EditViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -24,13 +23,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.businessplanai.AppDatabase
+import com.example.businessplanai.viewModel.EditViewModel
 
 @Composable
 fun EditPlan(
     padding: PaddingValues,
     editViewModel: EditViewModel,
     navigation: NavHostController,
-    db: AppDatabase,
     id: Int?
 ) {
     val focus = LocalFocusManager.current

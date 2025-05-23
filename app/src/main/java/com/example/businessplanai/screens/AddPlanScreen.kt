@@ -50,7 +50,6 @@ fun AddPlan(
     padding: PaddingValues,
     addViewModel: AddViewModel,
     navigation: NavHostController,
-    db: AppDatabase
 ) {
     var nameBusiness by remember { mutableStateOf("") }
     var pointBusiness by remember { mutableStateOf("") }

@@ -1,6 +1,5 @@
 package com.example.businessplanai
 
-import EditViewModel
 import android.app.Application
 import android.os.Build
 import android.os.Bundle
@@ -47,23 +46,22 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.businessplanai.navHost.NavigationHost
 import com.example.businessplanai.routes.ScreenRoute
 import com.example.businessplanai.ui.theme.BusinessPlanAITheme
 import com.example.businessplanai.viewModel.AddViewModel
+import com.example.businessplanai.viewModel.EditViewModel
 import com.example.businessplanai.viewModel.MainViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()
-    private val addViewModel: AddViewModel by viewModels()
-    private val editViewModel: EditViewModel by viewModels()
-    private val watchViewModel: WatchViewModel by viewModels()
-
     @RequiresApi(Build.VERSION_CODES.Q)
     @OptIn(
         ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -73,8 +71,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
+            val mainViewModel: MainViewModel = hiltViewModel()
+            val addViewModel: AddViewModel = hiltViewModel()
+            val editViewModel: EditViewModel = hiltViewModel()
+            val watchViewModel: WatchViewModel = hiltViewModel()
+
+
+
             val context = LocalContext.current.applicationContext as Application
-            val db = AppDatabase.getInstance(context)
+
             val scope = rememberCoroutineScope()
 
             val navigation = rememberNavController()
@@ -283,7 +288,6 @@ class MainActivity : ComponentActivity() {
                         addViewModel,
                         editViewModel,
                         watchViewModel,
-                        db,
                         listState
                     )
                 }

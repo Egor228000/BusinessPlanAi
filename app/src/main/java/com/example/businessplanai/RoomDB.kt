@@ -23,22 +23,6 @@ data class BusinessEnity(
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun businessDao(): BusinessDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance =
-                    Room.databaseBuilder(context, AppDatabase::class.java, "app_database")
-                        .fallbackToDestructiveMigration(false)
-                        .build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }
 
 @Dao
