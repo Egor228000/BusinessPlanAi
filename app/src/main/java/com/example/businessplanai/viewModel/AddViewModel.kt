@@ -2,9 +2,11 @@ package com.example.businessplanai.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.example.businessplanai.AppDatabase
 import com.example.businessplanai.BusinessDao
 import com.example.businessplanai.BusinessEnity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
@@ -24,31 +26,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import javax.inject.Inject
 
-class AddViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class AddViewModel @Inject constructor(private val dao: BusinessDao, private val client: HttpClient) : ViewModel() {
 
-    companion object {
-        val client = HttpClient(CIO) {
-            install(HttpTimeout) {
-                requestTimeoutMillis = 600_000
-                connectTimeoutMillis = 60_000
-                socketTimeoutMillis = 600_000
-            }
-            engine {
-                requestTimeout = 0
-            }
-            install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    prettyPrint = true
-                })
-            }
-        }
-    }
 
-    private val businessDao: BusinessDao by lazy {
-        AppDatabase.getInstance(application).businessDao()
-    }
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -100,7 +84,7 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
                                 )
                             ),
                             temperature = 0.1,
-                            max_tokens = 5000
+                            max_tokens = 300
 
                         )
                     )
@@ -119,7 +103,7 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
                 title = nameBusiness,
                 description = content
             )
-            businessDao.insert(entity)
+            dao.insert(entity)
             _isLoadingNavigate.value = false
             content
 
