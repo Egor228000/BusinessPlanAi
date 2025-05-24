@@ -153,7 +153,6 @@ fun Main(
     var focus = LocalFocusManager.current
     Column(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
 
     ) {
         TopAppBar(
@@ -177,6 +176,8 @@ fun Main(
             value = searcchBusinessCard,
             onValueChange = { searcchBusinessCard = it },
             modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+
                 .fillMaxWidth(1f),
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
@@ -214,6 +215,8 @@ fun Main(
             verticalArrangement = if (businessList.value.isEmpty()) Arrangement.Center else Arrangement.Top,
             horizontalAlignment = if (businessList.value.isEmpty()) Alignment.CenterHorizontally else Alignment.CenterHorizontally,
             modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+
                 .navigationBarsPadding()
                 .fillMaxSize()
         ) {
