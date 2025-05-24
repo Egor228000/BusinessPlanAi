@@ -21,8 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -38,7 +40,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.businessplanai.AppDatabase
 import com.example.businessplanai.R
 import com.example.businessplanai.routes.ScreenRoute
 import com.example.businessplanai.viewModel.MainViewModel
@@ -63,7 +64,7 @@ fun NotesAdaptiveScreen(
     var stateFloat = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> 0.20f
         WindowWidthSizeClass.Medium -> 0.30f
-        else -> 0.15f
+        else -> 0.30f
     }
 
     if (isExpandedScreen) {
@@ -100,15 +101,16 @@ fun NotesAdaptiveScreen(
                     Column {
 
                         TopAppBar(
+                            colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
+
                             title = {
                                 Text(
                                     "Просмотр",
-                                    color = MaterialTheme.colorScheme.onSurface,
+                                    color = MaterialTheme.colorScheme.background,
 
                                     )
                             },
                             navigationIcon = {
-
                                 IconButton(
                                     onClick = { selectedNoteId = null }
                                 ) {
@@ -186,6 +188,7 @@ fun NotesAdaptiveScreen(
                                 }
                             }
                         )
+
                         Watch(
                             padding,
                             watchViewModel,
@@ -208,23 +211,28 @@ fun NotesAdaptiveScreen(
         }
     } else {
         // Маленький экран
-        Main(
-            padding,
-            mainViewModel,
-            navigation,
-            onNoteSelected = { id ->
-                navigation.navigate("${ScreenRoute.Watch.route}/$id")
-            },
-            onDeleteClick = { deletedId ->
-                mainViewModel.deleteBusiness(deletedId)
-            },
-            onDeleteSelectedNote = { deletedId ->
-                if (selectedNoteId == deletedId) {
-                    selectedNoteId = null
-                }
-            },
-            listState
-        )
+
+
+
+            Main(
+                padding,
+                mainViewModel,
+                navigation,
+                onNoteSelected = { id ->
+                    navigation.navigate("${ScreenRoute.Watch.route}/$id")
+                },
+                onDeleteClick = { deletedId ->
+                    mainViewModel.deleteBusiness(deletedId)
+                },
+                onDeleteSelectedNote = { deletedId ->
+                    if (selectedNoteId == deletedId) {
+                        selectedNoteId = null
+                    }
+                },
+                listState
+            )
+
+
 
     }
 }

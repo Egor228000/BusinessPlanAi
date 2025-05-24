@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.businessplanai.AppDatabase
 import com.example.businessplanai.viewModel.WatchViewModel
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.DefaultMarkdownColors
@@ -44,108 +43,109 @@ fun Watch(
     val business = watchViewModel.business.collectAsState()
     Column(
         modifier = Modifier.padding(padding)
+            .padding(start = 16.dp, end = 16.dp)
+
     ) {
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
         ) {
             items(1) {
                 Spacer(modifier = Modifier.padding(top = 16.dp))
                 Text(
                     text = business!!.value?.title ?: "",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.background
                 )
             }
             items(1) {
                 Markdown(
                     content = business!!.value?.description ?: "",
                     colors = DefaultMarkdownColors(
-                        text = MaterialTheme.colorScheme.onSurface,
+                        text = MaterialTheme.colorScheme.background,
                         codeText = Color(0xFFd32f2f),
                         inlineCodeText = Color(0xFF388E3C),
                         linkText = Color(0xFF2D71B3),
                         codeBackground = Color(0xFFF5F5F5),
                         inlineCodeBackground = Color(0xFF422929),
-                        dividerColor = MaterialTheme.colorScheme.primaryContainer,
-                        tableText = MaterialTheme.colorScheme.onBackground,
-                        tableBackground = MaterialTheme.colorScheme.surface
+                        dividerColor = MaterialTheme.colorScheme.surface,
+                        tableText = MaterialTheme.colorScheme.background,
+                        tableBackground = MaterialTheme.colorScheme.onBackground
                     ),
                     typography = DefaultMarkdownTypography(
                         h1 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 30.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         h2 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 26.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         h3 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 22.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         h4 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         h5 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         h6 = TextStyle(
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         text = TextStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         code = TextStyle(
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         inlineCode = TextStyle(
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         quote = TextStyle(
                             fontSize = 16.sp,
                             fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         paragraph = TextStyle(
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         ordered = TextStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         bullet = TextStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         list = TextStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         ),
                         link = TextStyle(
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.background,
                             textDecoration = TextDecoration.Underline
                         ),
                         textLink = TextLinkStyles(
                             style = SpanStyle(
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.background
                             ),
                             focusedStyle = SpanStyle(),
                             hoveredStyle = SpanStyle(),
@@ -153,7 +153,7 @@ fun Watch(
                         ),
                         table = TextStyle(
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.background
                         )
                     )
                 )

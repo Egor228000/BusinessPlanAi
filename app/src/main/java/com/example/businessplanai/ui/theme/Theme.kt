@@ -7,45 +7,74 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryDark,
-    onPrimary = OnAccentButtonDark, // Текст на акцентных элементах
-    background = BackgroundDark,
-    surface = CardSurfaceDark,     // Фон карточек
-    onBackground = CardTextDark,   // Основной текст
-    onSurface = CardTextDark,      // Текст на поверхностях (карточках)
-    primaryContainer = AccentButtonDark, // Акцентные кнопки
-    onPrimaryContainer = OnAccentButtonDark, // Текст на акцентных кнопках
-    secondaryContainer = SecondaryButtonDark, // Обычные кнопки
-    onSecondaryContainer = OnSecondaryButtonDark // Текст на обычных кнопках
+    onPrimary = BackgroundDark, // Задний фон
+    background = TextColorDark,// Teкст  и иконки
+    surface = TextDescriptionColorDark,     //Вспомогающий текст
+    onBackground = CardSurfaceDark,   // Фон карточек и TextFieldOutline
+    onSurface = AccentButtonLightDark,      // Кнопки
+)
+private val LightColorScheme = lightColorScheme(
+    onPrimary = BackgroundLight,
+    background = TextColorLight,
+    surface = TextDescriptionColorLight,
+    onBackground = CardSurfaceLight,
+    onSurface = AccentButtonLightLight,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = PrimaryLight,
-    onPrimary = OnAccentButtonLight, // Текст на акцентных элементах
-    background = BackgroundLight,
-    surface = CardSurfaceLight,     // Фон карточек
-    onBackground = CardTextLight,   // Основной текст
-    onSurface = CardTextLight,      // Текст на поверхностях (карточках)
-    primaryContainer = AccentButtonLight, // Акцентные кнопки
-    onPrimaryContainer = OnAccentButtonLight, // Текст на акцентных кнопках
-    secondaryContainer = SecondaryButtonLight, // Обычные кнопки
-    onSecondaryContainer = OnSecondaryButtonLight // Текст на обычных кнопках
+
+
+private val DarkRedColorScheme = darkColorScheme(
+    onPrimary = BackgroundDarkRed,
+    background = TextColorDarkRed,
+    surface = TextDescriptionColorDarkRed,
+    onBackground = CardSurfaceDarkRed,
+    onSurface = AccentButtonRed,
 )
+private val LightRedColorScheme = lightColorScheme(
+    onPrimary = BackgroundLightRed,
+    background = TextColorLightRed,
+    surface = TextDescriptionColorLightRed,
+    onBackground = CardSurfaceLightRed,
+    onSurface = AccentButtonRed,
+)
+
+private val DarkGreenColorScheme = darkColorScheme(
+    onPrimary = BackgroundDarkGreen,
+    background = TextColorDarkGreen,
+    surface = TextDescriptionColorDarkGreen,
+    onBackground = CardSurfaceDarkGreen,
+    onSurface = AccentButtonGreen,
+)
+private val LightGreenColorScheme = lightColorScheme(
+    onPrimary = BackgroundLightGreen,
+    background = TextColorLightGreen,
+    surface = TextDescriptionColorLightGreen,
+    onBackground = CardSurfaceLightGreen,
+    onSurface = AccentButtonGreen,
+)
+
 
 @Composable
 fun BusinessPlanAITheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    appTheme: AppTheme = AppTheme.SYSTEM,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val darkTheme = when (appTheme) {
+        AppTheme.SYSTEM -> isSystemInDarkTheme()
+        AppTheme.LIGHT -> true
+        else -> false
+    }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = when (appTheme) {
+        AppTheme.SYSTEM -> if (darkTheme) DarkColorScheme else LightColorScheme
+        AppTheme.LIGHT -> LightColorScheme
+        AppTheme.DARK -> DarkColorScheme
+        AppTheme.DARKRed -> DarkRedColorScheme
+        AppTheme.LIGHTRed -> LightRedColorScheme
+        AppTheme.DARKGreen -> DarkGreenColorScheme
+        AppTheme.LIGHTGreen -> LightGreenColorScheme
+
     }
 
     MaterialTheme(
@@ -53,4 +82,13 @@ fun BusinessPlanAITheme(
         typography = Typography,
         content = content
     )
+}
+enum class AppTheme {
+    SYSTEM,
+    LIGHT,
+    DARK,
+    DARKRed,
+    LIGHTRed,
+    DARKGreen,
+    LIGHTGreen
 }
