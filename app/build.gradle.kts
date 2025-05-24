@@ -59,11 +59,7 @@ android {
         compose = true
     }
 
-    configurations.all {
-        exclude(group = "jakarta.activation", module = "jakarta.activation-api")
-        exclude(group = "jakarta.mail", module = "jakarta.mail-api")
-        exclude(group = "commons-logging", module = "commons-logging")
-    }
+
 }
 
 dependencies {
