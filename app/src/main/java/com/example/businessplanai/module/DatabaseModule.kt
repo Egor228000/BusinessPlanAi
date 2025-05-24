@@ -2,15 +2,15 @@ package com.example.businessplanai.module
 
 import android.content.Context
 import androidx.room.Room
-import com.example.businessplanai.AppDatabase
-import com.example.businessplanai.BusinessDao
+import com.example.businessplanai.data.AppDatabase
+import com.example.businessplanai.data.BusinessDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.jvm.java
 
 
 @Module

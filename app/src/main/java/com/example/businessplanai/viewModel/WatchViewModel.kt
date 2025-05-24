@@ -1,17 +1,15 @@
 package com.example.businessplanai.viewModel
 
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.businessplanai.AppDatabase
-import com.example.businessplanai.BusinessDao
-import com.example.businessplanai.BusinessEnity
+
+import com.example.businessplanai.data.BusinessDao
+import com.example.businessplanai.data.BusinessEnity
 import com.itextpdf.io.font.FontProgramFactory
 import com.itextpdf.io.font.PdfEncodings
 import com.itextpdf.kernel.font.PdfFont

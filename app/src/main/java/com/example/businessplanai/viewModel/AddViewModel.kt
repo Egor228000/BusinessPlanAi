@@ -1,16 +1,12 @@
 package com.example.businessplanai.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.example.businessplanai.AppDatabase
-import com.example.businessplanai.BusinessDao
-import com.example.businessplanai.BusinessEnity
+import androidx.lifecycle.viewModelScope
+import com.example.businessplanai.data.BusinessDao
+import com.example.businessplanai.data.BusinessEnity
+import com.example.businessplanai.NetworkStatusTracker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -18,9 +14,12 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -29,9 +28,19 @@ import kotlinx.serialization.json.jsonPrimitive
 import javax.inject.Inject
 
 @HiltViewModel
-class AddViewModel @Inject constructor(private val dao: BusinessDao, private val client: HttpClient) : ViewModel() {
+class AddViewModel @Inject constructor(
+    private val dao: BusinessDao, private val client: HttpClient,
+    networkStatusTracker: NetworkStatusTracker
+) : ViewModel() {
 
-
+    val isConnected = networkStatusTracker.observeNetworkStatus()
+        .distinctUntilChanged()
+        .onStart { emit(true) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(100),
+            initialValue = true
+        )
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -84,7 +93,7 @@ class AddViewModel @Inject constructor(private val dao: BusinessDao, private val
                                 )
                             ),
                             temperature = 0.1,
-                            max_tokens = 300
+                            max_tokens = 5000
 
                         )
                     )

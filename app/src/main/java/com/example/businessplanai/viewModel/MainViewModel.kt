@@ -1,14 +1,12 @@
 package com.example.businessplanai.viewModel
 
-import android.app.Application
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.businessplanai.AppDatabase
-import com.example.businessplanai.BusinessDao
-import com.example.businessplanai.BusinessEnity
+import com.example.businessplanai.data.BusinessDao
+import com.example.businessplanai.data.BusinessEnity
+import com.example.businessplanai.ui.theme.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,4 +39,6 @@ class MainViewModel @Inject constructor(private val dao: BusinessDao) : ViewMode
         _fabVisible.value = scrollDelta < 0
     }
     val globalScrollState = mutableStateMapOf<String, LazyListState>()
+
+
 }

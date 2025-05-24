@@ -1,6 +1,5 @@
-package com.example.businessplanai
+package com.example.businessplanai.data
 
-import android.content.Context
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -8,7 +7,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +17,7 @@ data class BusinessEnity(
     val description: String
 )
 
-@Database(entities = [BusinessEnity::class], version = 5)
+@Database(entities = [BusinessEnity::class], exportSchema = false, version = 6)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun businessDao(): BusinessDao
