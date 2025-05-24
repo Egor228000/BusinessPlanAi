@@ -87,8 +87,8 @@ enum class AppTheme {
     SYSTEM,
     LIGHT,
     DARK,
-    DARKRed,
     LIGHTRed,
-    DARKGreen,
-    LIGHTGreen
+    DARKRed,
+    LIGHTGreen,
+    DARKGreen
 }
