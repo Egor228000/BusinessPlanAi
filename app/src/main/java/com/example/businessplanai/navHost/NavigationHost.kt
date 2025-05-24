@@ -10,16 +10,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.businessplanai.AppDatabase
 import com.example.businessplanai.routes.ScreenRoute
 import com.example.businessplanai.screens.AddPlan
 import com.example.businessplanai.screens.EditPlan
 import com.example.businessplanai.screens.Main
 import com.example.businessplanai.screens.NotesAdaptiveScreen
+import com.example.businessplanai.screens.Settings
 import com.example.businessplanai.screens.Watch
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.EditViewModel
 import com.example.businessplanai.viewModel.MainViewModel
+import com.example.businessplanai.viewModel.SettingViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
 
 
@@ -32,6 +33,7 @@ fun NavigationHost(
     addViewModel: AddViewModel,
     editViewModel: EditViewModel,
     watchViewModel: WatchViewModel,
+    settingViewModel: SettingViewModel,
     listState: LazyListState
 ) {
     NavHost(
@@ -93,6 +95,14 @@ fun NavigationHost(
                 watchViewModel,
                 navigation,
                 listState
+            )
+        }
+
+        composable(ScreenRoute.Settings.route) {
+            Settings(
+                navigation,
+                padding,
+                settingViewModel
             )
         }
     }

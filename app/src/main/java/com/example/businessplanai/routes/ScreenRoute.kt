@@ -5,5 +5,6 @@ enum class ScreenRoute(val route: String) {
     Edit("editPlan"),
     Add("addPlan"),
     Watch("watch"),
-    Adaptive("adaptive")
+    Adaptive("adaptive"),
+    Settings("settings")
 }

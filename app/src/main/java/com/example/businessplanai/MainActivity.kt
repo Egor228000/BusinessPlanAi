@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -26,6 +25,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +33,7 @@ import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +47,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -55,6 +57,7 @@ import com.example.businessplanai.ui.theme.BusinessPlanAITheme
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.EditViewModel
 import com.example.businessplanai.viewModel.MainViewModel
+import com.example.businessplanai.viewModel.SettingViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +78,8 @@ class MainActivity : ComponentActivity() {
             val addViewModel: AddViewModel = hiltViewModel()
             val editViewModel: EditViewModel = hiltViewModel()
             val watchViewModel: WatchViewModel = hiltViewModel()
+            val settingViewModel: SettingViewModel = hiltViewModel()
+
 
 
 
@@ -100,9 +105,9 @@ class MainActivity : ComponentActivity() {
                         lastScrollOffset = offset
                     }
             }
-
+            val theme = settingViewModel.appTheme.collectAsState()
             BusinessPlanAITheme(
-                dynamicColor = false
+                appTheme = theme.value
             ) {
                 Scaffold(
                     modifier = Modifier.imePadding(),
@@ -117,27 +122,29 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     FloatingActionButton(
                                         onClick = { navigation.navigate(ScreenRoute.Add.route) },
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        containerColor = MaterialTheme.colorScheme.onSurface,
+                                        elevation =  FloatingActionButtonDefaults.elevation(1.dp)
                                     ) {
                                         Icon(
                                             Icons.Default.Add,
                                             contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.background
+                                            tint = MaterialTheme.colorScheme.background,
                                         )
                                     }
                                 }
                             }
                         }
                     },
-                    containerColor = MaterialTheme.colorScheme.background,
+                    containerColor = MaterialTheme.colorScheme.onPrimary,
                     topBar = {
                         when (currentRoute) {
                             "${ScreenRoute.Edit.route}/{id}" -> {
                                 TopAppBar(
+                                    colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary ),
                                     title = {
                                         Text(
                                             "Редактирование",
-                                            color = MaterialTheme.colorScheme.onSurface,
+                                            color = MaterialTheme.colorScheme.background,
                                         )
                                     },
                                     navigationIcon = {
@@ -146,7 +153,7 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             Icon(
                                                 Icons.AutoMirrored.Filled.ArrowBack, null,
-                                                tint = MaterialTheme.colorScheme.primaryContainer
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         }
                                     },
@@ -161,7 +168,7 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             Icon(
                                                 Icons.Default.Done, null,
-                                                tint = MaterialTheme.colorScheme.primaryContainer
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         }
                                     }
@@ -170,10 +177,12 @@ class MainActivity : ComponentActivity() {
 
                             "${ScreenRoute.Watch.route}/{id}" -> {
                                 TopAppBar(
+                                    colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary ),
+
                                     title = {
                                         Text(
                                             "Просмотр",
-                                            color = MaterialTheme.colorScheme.onSurface,
+                                            color = MaterialTheme.colorScheme.background,
 
                                             )
                                     },
@@ -184,7 +193,7 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             Icon(
                                                 Icons.AutoMirrored.Filled.ArrowBack, null,
-                                                tint = MaterialTheme.colorScheme.primaryContainer
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         }
                                     },
@@ -197,13 +206,13 @@ class MainActivity : ComponentActivity() {
                                             Icon(
                                                 painter = painterResource(R.drawable.outline_arrow_downward_24),
                                                 null,
-                                                tint = MaterialTheme.colorScheme.primaryContainer
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         }
                                         DropdownMenu(
                                             expanded = expanded,
                                             onDismissRequest = { expanded = false },
-                                            containerColor = MaterialTheme.colorScheme.surface
+                                            containerColor = MaterialTheme.colorScheme.onBackground
                                         ) {
                                             DropdownMenuItem(
                                                 onClick = {
@@ -218,11 +227,12 @@ class MainActivity : ComponentActivity() {
                                                         )
                                                     }
                                                 },
-                                                text = { Text("PDF") },
+                                                text = { Text("PDF", color = MaterialTheme.colorScheme.background,) },
                                                 leadingIcon = {
                                                     Icon(
                                                         Icons.Default.Edit,
-                                                        contentDescription = null
+                                                        contentDescription = null,
+                                                        tint = MaterialTheme.colorScheme.background
                                                     )
                                                 },
                                                 colors = MenuDefaults.itemColors(
@@ -246,11 +256,12 @@ class MainActivity : ComponentActivity() {
                                                 leadingIcon = {
                                                     Icon(
                                                         Icons.Default.Delete,
-                                                        contentDescription = null
+                                                        contentDescription = null,
+                                                        tint = MaterialTheme.colorScheme.background
                                                     )
                                                 },
                                                 colors = MenuDefaults.itemColors(
-                                                    MaterialTheme.colorScheme.onBackground
+                                                    MaterialTheme.colorScheme.background
                                                 )
                                             )
                                         }
@@ -260,10 +271,11 @@ class MainActivity : ComponentActivity() {
 
                             ScreenRoute.Add.route -> {
                                 TopAppBar(
+                                    colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary ),
                                     title = {
                                         Text(
                                             "Добавление безнесс плана",
-                                            color = MaterialTheme.colorScheme.onSurface,
+                                            color = MaterialTheme.colorScheme.background,
                                         )
                                     },
                                     navigationIcon = {
@@ -272,7 +284,28 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             Icon(
                                                 Icons.AutoMirrored.Filled.ArrowBack, null,
-                                                tint = MaterialTheme.colorScheme.primaryContainer
+                                                tint = MaterialTheme.colorScheme.background
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                            ScreenRoute.Settings.route -> {
+                                TopAppBar(
+                                    colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary ),
+                                    title = {
+                                        Text(
+                                            "Настройки",
+                                            color = MaterialTheme.colorScheme.background,
+                                        )
+                                    },
+                                    navigationIcon = {
+                                        IconButton(
+                                            onClick = { navigation.popBackStack() }
+                                        ) {
+                                            Icon(
+                                                Icons.AutoMirrored.Filled.ArrowBack, null,
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         }
                                     }
@@ -288,7 +321,9 @@ class MainActivity : ComponentActivity() {
                         addViewModel,
                         editViewModel,
                         watchViewModel,
-                        listState
+                        settingViewModel,
+                        listState,
+
                     )
                 }
             }
