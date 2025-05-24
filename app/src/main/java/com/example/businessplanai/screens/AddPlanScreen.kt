@@ -1,5 +1,6 @@
 package com.example.businessplanai.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -43,7 +46,10 @@ import com.example.businessplanai.AppDatabase
 import com.example.businessplanai.R
 import com.example.businessplanai.ui.theme.BackgroundDark
 import com.example.businessplanai.viewModel.AddViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import org.bouncycastle.crypto.params.Blake3Parameters.context
 
 @Composable
 fun AddPlan(
@@ -61,7 +67,21 @@ fun AddPlan(
     val isLoadingNavigate = addViewModel.isLoadingNavigate.collectAsState()
     val focus = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val isConnected by addViewModel.isConnected.collectAsState()
 
+    LaunchedEffect(isConnected) {
+        if (!isConnected) {
+            delay(2000)
+            if (!addViewModel.isConnected.value) {
+                Toast.makeText(
+                    context,
+                    "Нет интернета",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
     Column(
     ) {
@@ -288,7 +308,7 @@ fun AddPlan(
                             modifier = Modifier
                                 .navigationBarsPadding()
                                 .fillMaxWidth(1f),
-                            enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty()),
+                            enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected),
                             border = BorderStroke(
                                 1.dp,
                                 MaterialTheme.colorScheme.primaryContainer
