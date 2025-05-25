@@ -115,7 +115,7 @@ fun NotesAdaptiveScreen(
                                 ) {
                                     Icon(
                                         Icons.AutoMirrored.Filled.ArrowBack, null,
-                                        tint = MaterialTheme.colorScheme.primaryContainer
+                                        tint = MaterialTheme.colorScheme.background
                                     )
                                 }
                             },
@@ -128,13 +128,13 @@ fun NotesAdaptiveScreen(
                                     Icon(
                                         painter = painterResource(R.drawable.outline_arrow_downward_24),
                                         null,
-                                        tint = MaterialTheme.colorScheme.primaryContainer
+                                        tint = MaterialTheme.colorScheme.background
                                     )
                                 }
                                 DropdownMenu(
                                     expanded = expanded,
                                     onDismissRequest = { expanded = false },
-                                    containerColor = MaterialTheme.colorScheme.surface
+                                    containerColor = MaterialTheme.colorScheme.onBackground
                                 ) {
                                     DropdownMenuItem(
                                         onClick = {
@@ -157,7 +157,7 @@ fun NotesAdaptiveScreen(
                                             )
                                         },
                                         colors = MenuDefaults.itemColors(
-                                            MaterialTheme.colorScheme.onBackground
+                                            MaterialTheme.colorScheme.background
                                         )
                                     )
                                     DropdownMenuItem(
@@ -177,11 +177,12 @@ fun NotesAdaptiveScreen(
                                         leadingIcon = {
                                             Icon(
                                                 Icons.Default.Delete,
-                                                contentDescription = null
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.background
                                             )
                                         },
                                         colors = MenuDefaults.itemColors(
-                                            MaterialTheme.colorScheme.onBackground
+                                            MaterialTheme.colorScheme.background
                                         )
                                     )
                                 }
