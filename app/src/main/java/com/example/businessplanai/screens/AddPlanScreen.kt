@@ -1,30 +1,32 @@
 package com.example.businessplanai.screens
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,17 +48,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.businessplanai.R
-import com.example.businessplanai.ui.theme.BackgroundDark
-import com.example.businessplanai.ui.theme.TextColorDark
 import com.example.businessplanai.viewModel.AddViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun AddPlan(
     padding: PaddingValues,
@@ -76,6 +72,13 @@ fun AddPlan(
     val context = LocalContext.current
     val isConnected by addViewModel.isConnected.collectAsState()
 
+    val activity = LocalContext.current
+    val windowSizeClass = calculateWindowSizeClass(activity as Activity)
+    var paddingVertical = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 32.dp
+        WindowWidthSizeClass.Medium -> 32.dp
+        else -> 32.dp
+    }
     LaunchedEffect(isConnected) {
         if (!isConnected) {
             delay(2000)
@@ -89,16 +92,21 @@ fun AddPlan(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .padding(padding)
-            .padding(top = 16.dp)
 
+            .padding(top = 16.dp)
             .padding(16.dp)
+            .fillMaxSize()
     ) {
+
+
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(32.dp),
+            verticalArrangement = Arrangement.spacedBy(paddingVertical),
             modifier = Modifier
+                .padding(bottom = 70.dp)
+
         ) {
             items(1) {
                 OutlinedTextField(
@@ -291,7 +299,7 @@ fun AddPlan(
                     ),
                     placeholder = {
                         Text(
-                            "Как будете зарабатывать?",
+                            "Какие будут минусы или проблемы",
                             color = MaterialTheme.colorScheme.surface,
                             fontSize = 20.sp
 
@@ -313,6 +321,7 @@ fun AddPlan(
             }
 
         }
+        Spacer(modifier = Modifier)
         Column(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier.fillMaxHeight(1f)
@@ -334,7 +343,6 @@ fun AddPlan(
                     },
                     colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier
-                        .navigationBarsPadding()
                         .height(50.dp)
                         .fillMaxWidth(1f),
                     enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected),
@@ -363,7 +371,10 @@ fun AddPlan(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxSize(1f)
                     ) {
-                        val composition by rememberLottieComposition(
+                        CircularProgressIndicator(
+                           color = MaterialTheme.colorScheme.onSurface,
+                        )
+                       /* val composition by rememberLottieComposition(
                             LottieCompositionSpec.RawRes(
                                 if (MaterialTheme.colorScheme.background == BackgroundDark) {
                                     R.raw.loading_dark
@@ -376,7 +387,7 @@ fun AddPlan(
                             composition,
                             modifier = Modifier.fillMaxWidth(1f),
                             iterations = LottieConstants.IterateForever
-                        )
+                        )*/
                     }
                 }
             }

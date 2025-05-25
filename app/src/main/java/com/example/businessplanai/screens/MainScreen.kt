@@ -33,6 +33,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -222,7 +223,8 @@ fun Main(
         ) {
             if (businessList.value.isEmpty()) {
                 items(1) {
-                    val composition by rememberLottieComposition(
+                    Text("Пока еще ничего нет", color = MaterialTheme.colorScheme.onSurface)
+                    /*val composition by rememberLottieComposition(
                         LottieCompositionSpec.RawRes(
                             if (MaterialTheme.colorScheme.background == BackgroundDark) {
                                 R.raw.empty_light
@@ -234,7 +236,7 @@ fun Main(
                     LottieAnimation(
                         composition,
                         modifier = Modifier.fillMaxWidth(1f),
-                    )
+                    )*/
                 }
             } else {
                 items(filteredList) { card ->

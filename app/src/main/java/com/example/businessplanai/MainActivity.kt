@@ -68,7 +68,8 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.Q)
     @OptIn(
-        ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+        ExperimentalMaterial3Api::class,
+        ExperimentalLayoutApi::class,
         ExperimentalMaterial3WindowSizeClassApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,9 +84,7 @@ class MainActivity : ComponentActivity() {
             val watchViewModel: WatchViewModel = hiltViewModel()
 
             val theme = settingViewModel.appTheme.collectAsState()
-
             val context = LocalContext.current.applicationContext as Application
-
             val scope = rememberCoroutineScope()
 
             val navigation = rememberNavController()
@@ -100,13 +99,11 @@ class MainActivity : ComponentActivity() {
             var lastScrollOffset by remember { mutableIntStateOf(1) }
 
             LaunchedEffect(listState) {
-                snapshotFlow { listState.firstVisibleItemScrollOffset }
-                    .collect { offset ->
+                snapshotFlow { listState.firstVisibleItemScrollOffset }.collect { offset ->
                         mainViewModel.onScroll(offset - lastScrollOffset.toFloat())
                         lastScrollOffset = offset
                     }
             }
-
 
             theme.value?.let { actualTheme ->
                 BusinessPlanAITheme(
@@ -121,8 +118,7 @@ class MainActivity : ComponentActivity() {
                                     AnimatedVisibility(
                                         visible = fabVisible,
                                         enter = fadeIn() + slideInVertically { it },
-                                        exit = fadeOut() + slideOutVertically { it }
-                                    ) {
+                                        exit = fadeOut() + slideOutVertically { it }) {
                                         FloatingActionButton(
                                             onClick = { navigation.navigate(ScreenRoute.Add.route) },
                                             containerColor = MaterialTheme.colorScheme.onSurface,
@@ -152,10 +148,10 @@ class MainActivity : ComponentActivity() {
                                         },
                                         navigationIcon = {
                                             IconButton(
-                                                onClick = { navigation.popBackStack() }
-                                            ) {
+                                                onClick = { navigation.popBackStack() }) {
                                                 Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack, null,
+                                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                                    null,
                                                     tint = MaterialTheme.colorScheme.background
                                                 )
                                             }
@@ -167,10 +163,10 @@ class MainActivity : ComponentActivity() {
                                                         editViewModel.saveChanges()
                                                     }
                                                     navigation.popBackStack()
-                                                }
-                                            ) {
+                                                }) {
                                                 Icon(
-                                                    Icons.Default.Done, null,
+                                                    Icons.Default.Done,
+                                                    null,
                                                     tint = MaterialTheme.colorScheme.background
                                                 )
                                             }
@@ -180,7 +176,9 @@ class MainActivity : ComponentActivity() {
 
                                 "${ScreenRoute.Watch.route}/{id}" -> {
                                     TopAppBar(
-                                        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
+                                        colors = TopAppBarDefaults.topAppBarColors(
+                                            MaterialTheme.colorScheme.onPrimary
+                                        ),
 
                                         title = {
                                             Text(
@@ -188,24 +186,21 @@ class MainActivity : ComponentActivity() {
                                                 color = MaterialTheme.colorScheme.background,
 
                                                 )
-                                        },
-                                        navigationIcon = {
+                                        }, navigationIcon = {
 
                                             IconButton(
-                                                onClick = { navigation.popBackStack() }
-                                            ) {
+                                                onClick = { navigation.popBackStack() }) {
                                                 Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack, null,
+                                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                                    null,
                                                     tint = MaterialTheme.colorScheme.background
                                                 )
                                             }
-                                        },
-                                        actions = {
+                                        }, actions = {
                                             IconButton(
                                                 onClick = {
                                                     expanded = true
-                                                }
-                                            ) {
+                                                }) {
                                                 Icon(
                                                     painter = painterResource(R.drawable.outline_arrow_downward_24),
                                                     null,
@@ -229,21 +224,18 @@ class MainActivity : ComponentActivity() {
                                                                 watchViewModel.getCurrentBusinessText()
                                                             )
                                                         }
-                                                    },
-                                                    text = {
+                                                    }, text = {
                                                         Text(
                                                             "PDF",
                                                             color = MaterialTheme.colorScheme.background,
                                                         )
-                                                    },
-                                                    leadingIcon = {
+                                                    }, leadingIcon = {
                                                         Icon(
                                                             Icons.Default.Edit,
                                                             contentDescription = null,
                                                             tint = MaterialTheme.colorScheme.background
                                                         )
-                                                    },
-                                                    colors = MenuDefaults.itemColors(
+                                                    }, colors = MenuDefaults.itemColors(
                                                         MaterialTheme.colorScheme.onBackground
                                                     )
                                                 )
@@ -259,16 +251,13 @@ class MainActivity : ComponentActivity() {
                                                                 content = watchViewModel.getCurrentBusinessText()
                                                             )
                                                         }
-                                                    },
-                                                    text = { Text("Word") },
-                                                    leadingIcon = {
+                                                    }, text = { Text("Word") }, leadingIcon = {
                                                         Icon(
                                                             Icons.Default.Delete,
                                                             contentDescription = null,
                                                             tint = MaterialTheme.colorScheme.background
                                                         )
-                                                    },
-                                                    colors = MenuDefaults.itemColors(
+                                                    }, colors = MenuDefaults.itemColors(
                                                         MaterialTheme.colorScheme.background
                                                     )
                                                 )
@@ -288,10 +277,10 @@ class MainActivity : ComponentActivity() {
                                         },
                                         navigationIcon = {
                                             IconButton(
-                                                onClick = { navigation.popBackStack() }
-                                            ) {
+                                                onClick = { navigation.popBackStack() }) {
                                                 Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack, null,
+                                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                                    null,
                                                     tint = MaterialTheme.colorScheme.background
                                                 )
                                             }
@@ -310,10 +299,10 @@ class MainActivity : ComponentActivity() {
                                         },
                                         navigationIcon = {
                                             IconButton(
-                                                onClick = { navigation.popBackStack() }
-                                            ) {
+                                                onClick = { navigation.popBackStack() }) {
                                                 Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack, null,
+                                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                                    null,
                                                     tint = MaterialTheme.colorScheme.background
                                                 )
                                             }
@@ -337,7 +326,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
         }
     }
 }

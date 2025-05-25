@@ -64,7 +64,7 @@ fun NotesAdaptiveScreen(
     var stateFloat = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> 0.20f
         WindowWidthSizeClass.Medium -> 0.30f
-        else -> 0.30f
+        else -> 0.20f
     }
 
     if (isExpandedScreen) {
