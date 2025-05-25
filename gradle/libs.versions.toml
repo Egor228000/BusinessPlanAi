@@ -1,7 +1,10 @@
 [versions]
 agp = "8.10.0"
 coreSplashscreen = "1.0.1"
+datastorePreferences = "1.1.7"
 flexmarkAll = "0.64.0"
+hiltAndroid = "2.56.2"
+hiltNavigationCompose = "1.2.0"
 html2pdf = "4.0.3"
 itext7Core = "7.2.5"
 kotlin = "2.0.21"
@@ -24,11 +27,15 @@ roomRuntime = "2.7.1"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material3-window-size-class1 = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 flexmark-all = { module = "com.vladsch.flexmark:flexmark-all", version.ref = "flexmarkAll" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 html2pdf = { module = "com.itextpdf:html2pdf", version.ref = "html2pdf" }
 itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
