@@ -104,7 +104,7 @@ Responsive дизайн достигается благодаря использ
 ## 📸 Скриншоты и демонстрация
 | Светлая                      | Темная                              | Светлая Красная             | Темная Красная                      |Светлая Зеленая              |Темная Зеленая|           
 | ---------------------------- | ----------------------------------- |---------------------------- | ----------------------------------- |---------------------------- | ----------------------------------- |
-|<img src="ScreenVideo/Light.png" width="250" alt="Превью 2" />|<img src="ScreenVideo/Dark.png" width="250" alt="Превью 2" />|<img src="ScreenVideo/LightRed.png" width="250" alt="Превью 2" />|<img src="ScreenVideo/DarkRed.png" width="250" alt="Превью 2" />|<img src="ScreenVideo/LightGreen.png" width="250" alt="Превью 2" />|<img src="ScreenVideo/DarkGreen.png" width="250" alt="Превью 2" />|
+|<img src="ScreenVideo/Light.png" width="400" alt="Превью 2" />|<img src="ScreenVideo/Dark.png" width="400" alt="Превью 2" />|<img src="ScreenVideo/LightRed.png" width="400" alt="Превью 2" />|<img src="ScreenVideo/DarkRed.png" width="400" alt="Превью 2" />|<img src="ScreenVideo/LightGreen.png" width="400" alt="Превью 2" />|<img src="ScreenVideo/DarkGreen.png" width="400" alt="Превью 2" />|
 
 <img src="ScreenVideo/PhoneVideo.gif" width="250" alt="Превью 2" />
 
