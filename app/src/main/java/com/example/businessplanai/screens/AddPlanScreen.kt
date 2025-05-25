@@ -374,20 +374,7 @@ fun AddPlan(
                         CircularProgressIndicator(
                            color = MaterialTheme.colorScheme.onSurface,
                         )
-                       /* val composition by rememberLottieComposition(
-                            LottieCompositionSpec.RawRes(
-                                if (MaterialTheme.colorScheme.background == BackgroundDark) {
-                                    R.raw.loading_dark
-                                } else {
-                                    R.raw.loading_light
-                                }
-                            )
-                        )
-                        LottieAnimation(
-                            composition,
-                            modifier = Modifier.fillMaxWidth(1f),
-                            iterations = LottieConstants.IterateForever
-                        )*/
+
                     }
                 }
             }
