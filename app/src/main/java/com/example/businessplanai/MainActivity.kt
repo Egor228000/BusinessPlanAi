@@ -73,8 +73,8 @@ class MainActivity : ComponentActivity() {
         ExperimentalMaterial3WindowSizeClassApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         enableEdgeToEdge()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             val settingViewModel: SettingViewModel = hiltViewModel()

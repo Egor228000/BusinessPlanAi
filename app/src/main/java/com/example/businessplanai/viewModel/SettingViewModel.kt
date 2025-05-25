@@ -26,6 +26,7 @@ class SettingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _appTheme.value = appPreferences.getAppTheme()
+            _serverIp.value = appPreferences.getServerIp()
         }
     }
 

@@ -30,8 +30,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddViewModel @Inject constructor(
     private val dao: BusinessDao, private val client: HttpClient,
-    networkStatusTracker: NetworkStatusTracker
+    networkStatusTracker: NetworkStatusTracker,
 ) : ViewModel() {
+
 
     val isConnected = networkStatusTracker.observeNetworkStatus()
         .distinctUntilChanged()
@@ -48,24 +49,28 @@ class AddViewModel @Inject constructor(
     private val _isLoadingNavigate = MutableStateFlow(false)
     val isLoadingNavigate: StateFlow<Boolean> = _isLoadingNavigate
 
+
     suspend fun getFullChatResponse(
         nameBusiness: String,
         pointBusiness: String,
         auditoriumBusiness: String,
         advantagesBusiness: String,
         monetizationBusiness: String,
-        barriersAndSolutionsBusiness: String
+        barriersAndSolutionsBusiness: String,
+        ipAdress:  String
     ): String {
 
         _isLoading.value = true
         return try {
+
             val response: HttpResponse =
-                client.request("/v1/chat/completions") {//
+                client.request("http://$ipAdress/v1/chat/completions") {
+
                     method = HttpMethod.Post
                     contentType(ContentType.Application.Json)
                     setBody(
                         ChatRequest(
-                            model = "gemma-3-1b-it-qat",
+                            model = "",
                             messages = listOf(
                                 ChatMessage(
                                     role = "user",

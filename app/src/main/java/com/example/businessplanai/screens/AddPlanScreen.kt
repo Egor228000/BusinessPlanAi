@@ -49,6 +49,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.example.businessplanai.viewModel.AddViewModel
+import com.example.businessplanai.viewModel.SettingViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -58,6 +59,7 @@ fun AddPlan(
     padding: PaddingValues,
     addViewModel: AddViewModel,
     navigation: NavHostController,
+    settingViewModel: SettingViewModel
 ) {
     var nameBusiness by remember { mutableStateOf("") }
     var pointBusiness by remember { mutableStateOf("") }
@@ -71,7 +73,7 @@ fun AddPlan(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val isConnected by addViewModel.isConnected.collectAsState()
-
+    val ipAdress by settingViewModel.serverIp.collectAsState()
     val activity = LocalContext.current
     val windowSizeClass = calculateWindowSizeClass(activity as Activity)
     var paddingVertical = when (windowSizeClass.widthSizeClass) {
@@ -337,7 +339,8 @@ fun AddPlan(
                                 auditoriumBusiness,
                                 advantagesBusiness,
                                 monetizationBusiness,
-                                barriersAndSolutionsBusiness
+                                barriersAndSolutionsBusiness,
+                                ipAdress
                             )
                         }
                     },

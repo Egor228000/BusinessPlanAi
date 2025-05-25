@@ -60,6 +60,7 @@ fun NavigationHost(
                 padding,
                 addViewModel,
                 navigation,
+                settingViewModel
             )
         }
 

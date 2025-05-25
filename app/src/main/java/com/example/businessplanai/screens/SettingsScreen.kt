@@ -7,12 +7,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -34,6 +40,7 @@ import androidx.navigation.NavHostController
 import com.example.businessplanai.ui.theme.AppTheme
 import com.example.businessplanai.viewModel.SettingViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(
     navigation: NavHostController,
@@ -41,11 +48,11 @@ fun Settings(
     settingViewModel: SettingViewModel
 ) {
 
-    var ipAdress by remember { mutableStateOf("") }
     val focus = LocalFocusManager.current
 
     val currentTheme by settingViewModel.appTheme.collectAsState()
     val serverIp by settingViewModel.serverIp.collectAsState()
+    var ipAdress by remember { mutableStateOf(serverIp) }
 
 
 
@@ -104,6 +111,20 @@ fun Settings(
                         color = MaterialTheme.colorScheme.background,
                         fontSize = 20.sp
                     )
+                },
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            settingViewModel.setServerIp(ipAdress)
+                        },
+                        enabled = ipAdress.isNotEmpty()
+                    ) {
+                        Icon(
+                            Icons.Default.Done,
+                            null,
+                            tint = MaterialTheme.colorScheme.background,
+                        )
+                    }
                 }
             )
 
@@ -122,16 +143,17 @@ fun Settings(
                 AppTheme.DARKGreen to "Тёмная зелёная"
             )
 
+
             options.forEach { (theme, label) ->
                 Row {
                     AssistChip(
                         onClick = { settingViewModel.setTheme(theme) },
-                        label = { Text(label) },
+                        label = { Text(label, color = MaterialTheme.colorScheme.background) },
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = if (currentTheme == theme) {
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.onSurface
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant
+                                MaterialTheme.colorScheme.onBackground
                             },
                             labelColor = if (currentTheme == theme) {
                                 MaterialTheme.colorScheme.onPrimary
@@ -139,7 +161,7 @@ fun Settings(
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             }
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.width(150.dp)
                     )
                 }
             }

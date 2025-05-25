@@ -7,7 +7,6 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.example.businessplanai.data.BusinessDao
 import com.example.businessplanai.data.BusinessEnity
 import com.itextpdf.io.font.FontProgramFactory
