@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settingTheme_7">Verde oscuro</string>
+    <string name="app_name">BusinessPlanAI</string>
+    <string name="titleEdit">Edición</string>
+    <string name="titleWatch">Visualización</string>
+    <string name="titleAdd">Agregar un plan de negocios</string>
+    <string name="titleSetting">Ajustes</string>
+    <string name="titleMain">Principal</string>
+    <string name="titlePlaceholder">Buscar</string>
+    <string name="EmptyNote">Todavía no hay nada</string>
+    <string name="fieldCustomText_1">Nombre de la empresa</string>
+    <string name="fieldCustomText_2">La esencia de los negocios</string>
+    <string name="fieldCustomText_3">Público objetivo</string>
+    <string name="fieldCustomText_4">Ventajas competitivas</string>
+    <string name="fieldCustomText_5">¿Cómo ganarás dinero?</string>
+    <string name="fieldCustomText_6">¿Cuáles son las desventajas o problemas?</string>
+    <string name="buttonText">Generar plan</string>
+    <string name="fieldCustomTextEdit_2">Plan de negocios</string>
+    <string name="dialogQuestion_1">¿Realmente quieres eliminar?</string>
+    <string name="dialogText">Esta acción es irreversible</string>
+    <string name="dialogNo">Sí, elimínalo</string>
+    <string name="dialogYes">No, cancelación</string>
+    <string name="businessCardEdit">Editar</string>
+    <string name="businessCardDelete">Eliminar</string>
+    <string name="businessCardSelectedNote">Seleccione una nota</string>
+    <string name="settingDescription_1">La dirección de su servidor en LM-Studio</string>
+    <string name="settingDescription_2">Especifique la dirección del servidor y no olvide especificar el puerto (últimos 4 dígitos)</string>
+    <string name="settingThemeTitle">Temas de Aplicación</string>
+    <string name="settingTheme_1">Sistema</string>
+    <string name="settingTheme_2">Luz</string>
+    <string name="settingTheme_3">Oscuro</string>
+    <string name="settingTheme_4">Rojo claro</string>
+    <string name="settingTheme_5">Rojo oscuro</string>
+    <string name="settingTheme_6">Verde claro</string>
+</resources>
