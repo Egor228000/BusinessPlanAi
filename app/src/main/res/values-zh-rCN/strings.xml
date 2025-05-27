@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settingTheme_7">深绿色</string>
+    <string name="app_name">BusinessPlanAI</string>
+    <string name="titleEdit">编辑</string>
+    <string name="titleWatch">查看</string>
+    <string name="titleAdd">添加业务计划</string>
+    <string name="titleSetting">设置</string>
+    <string name="titleMain">主要</string>
+    <string name="titlePlaceholder">搜索</string>
+    <string name="EmptyNote">还什么都没有</string>
+    <string name="fieldCustomText_1">公司名称</string>
+    <string name="fieldCustomText_2">商业的本质</string>
+    <string name="fieldCustomText_3">目标受众</string>
+    <string name="fieldCustomText_4">竞争优势</string>
+    <string name="fieldCustomText_5">你将如何赚钱？</string>
+    <string name="fieldCustomText_6">有什么缺点或问题？</string>
+    <string name="buttonText">生成计划</string>
+    <string name="fieldCustomTextEdit_2">业务计划</string>
+    <string name="dialogQuestion_1">你真的想删除吗？</string>
+    <string name="dialogText">这一行动是不可逆转的</string>
+    <string name="dialogNo">是的，删除它</string>
+    <string name="dialogYes">不，取消</string>
+    <string name="businessCardEdit">编辑</string>
+    <string name="businessCardDelete">移走</string>
+    <string name="businessCardSelectedNote">选择注释</string>
+    <string name="settingDescription_1">您的服务器在LM-Studio中的地址</string>
+    <string name="settingDescription_2">指定服务器地址，不要忘记指定端口（最后4位数字）</string>
+    <string name="settingThemeTitle">应用主题</string>
+    <string name="settingTheme_1">系统</string>
+    <string name="settingTheme_2">光</string>
+    <string name="settingTheme_3">黑暗</string>
+    <string name="settingTheme_4">浅红色</string>
+    <string name="settingTheme_5">深红色</string>
+    <string name="settingTheme_6">浅绿色</string>
+</resources>
