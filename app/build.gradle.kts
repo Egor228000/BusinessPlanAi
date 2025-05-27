@@ -41,12 +41,14 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -64,11 +66,9 @@ android {
 
 dependencies {
     implementation (libs.androidx.datastore.preferences)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
-
 
     implementation (libs.androidx.material3.window.size.class1)
     implementation (libs.androidx.navigation.compose)
@@ -76,7 +76,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 
-    implementation(libs.lottie.compose)
     implementation (libs.androidx.core.splashscreen)
 
     implementation(libs.ktor.client.content.negotiation)
