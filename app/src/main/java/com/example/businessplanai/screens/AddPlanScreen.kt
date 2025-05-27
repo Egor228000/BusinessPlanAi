@@ -80,7 +80,7 @@ fun AddPlan(
     val ipAdress by settingViewModel.serverIp.collectAsState()
 
 
-
+    val resources = stringResource(R.string.business_plan_template)
     LaunchedEffect(isConnected) {
         if (!isConnected) {
             delay(2000)
@@ -173,9 +173,12 @@ fun AddPlan(
             modifier = Modifier.fillMaxHeight(1f)
         ) {
             if (!isLoading.value) {
+                val context = LocalContext.current
+                val resources = context.resources
                 Button(
                     elevation = ButtonDefaults.buttonElevation(1.dp),
                     onClick = {
+
                         scope.launch {
                             addViewModel.getFullChatResponse(
                                 nameBusiness,
@@ -184,7 +187,8 @@ fun AddPlan(
                                 advantagesBusiness,
                                 monetizationBusiness,
                                 barriersAndSolutionsBusiness,
-                                ipAdress
+                                ipAdress,
+                                resources
                             )
                         }
                     },

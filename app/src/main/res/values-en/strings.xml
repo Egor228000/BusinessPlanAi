@@ -33,4 +33,27 @@
     <string name="settingTheme_4">Light red</string>
     <string name="settingTheme_5">Dark red</string>
     <string name="settingTheme_6">Light green</string>
+    <string name="business_plan_template">
+    Generate a detailed business plan by sequentially addressing 5 key questions. Based on the answers, create a structured document with analysis, strategies, and financial calculations.
+    Also, include a financial plan table using markdown.
+
+    1. Business name: %1$s
+    2. Business concept: %2$s
+    (What will the company do? Briefly describe the product or service.)
+    3. Target audience: %3$s
+    (Who are the main customers? Their age, income, and needs.)
+    4. Competitive advantages: %4$s
+    (Why will customers choose this business? Unique features.)
+    5. Monetization model: %5$s
+    (How will the business earn money? Main revenue sources, pricing.)
+    6. Barriers and solutions: %6$s
+    (What are the main risks? How to minimize them?)
+
+    Additional sections (generate them based on the answers above):
+    - Market analysis (niche, trends, competitors)
+    - Marketing and promotion (channels, budget)
+    - Operations (location, equipment, logistics)
+    - Financial plan (investments, expenses, payback)
+    - KPIs (key performance indicators)
+    </string>
 </resources>

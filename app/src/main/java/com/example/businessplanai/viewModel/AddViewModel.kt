@@ -1,5 +1,7 @@
 package com.example.businessplanai.viewModel
 
+import android.content.res.Resources
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.data.BusinessDao
@@ -26,13 +28,13 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import javax.inject.Inject
+import com.example.businessplanai.R
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
     private val dao: BusinessDao, private val client: HttpClient,
     networkStatusTracker: NetworkStatusTracker,
 ) : ViewModel() {
-
 
     val isConnected = networkStatusTracker.observeNetworkStatus()
         .distinctUntilChanged()
@@ -57,8 +59,18 @@ class AddViewModel @Inject constructor(
         advantagesBusiness: String,
         monetizationBusiness: String,
         barriersAndSolutionsBusiness: String,
-        ipAdress:  String
+        ipAdress:  String,
+        resources: Resources  // ← Добавляем сюда ресурсы
     ): String {
+        val prompt = resources.getString(
+            R.string.business_plan_template,
+            nameBusiness,
+            pointBusiness,
+            auditoriumBusiness,
+            advantagesBusiness,
+            monetizationBusiness,
+            barriersAndSolutionsBusiness
+        ).trimIndent()
 
         _isLoading.value = true
         return try {
@@ -74,27 +86,7 @@ class AddViewModel @Inject constructor(
                             messages = listOf(
                                 ChatMessage(
                                     role = "user",
-                                    content = """
-                                        Сгенерируй подробный бизнес-план, последовательно раскрывая 5 ключевых вопросов. На основе ответов составь структурированный документ с анализом, стратегиями и расчетами.
-                                        И сделай таблицу с помощью markdown к Финансовуму плану.
-                                        1. Название вашего бизнеса: $nameBusiness
-                                        2. Суть бизнеса: $pointBusiness
-                                        (Чем будет заниматься компания? Кратко опиши продукт или услугу.)
-                                        3. Целевая аудитория: $auditoriumBusiness
-                                        (Кто основные клиенты? Их возраст, доход, потребности.)
-                                        4. Конкурентные преимущества: $advantagesBusiness
-                                        "(Почему клиенты выберут именно этот бизнес? Уникальные особенности.)
-                                        5. Модель монетизации: $monetizationBusiness
-                                        (Как будет зарабатывать? Основные источники дохода, ценообразование.)
-                                        6. Барьеры и решения: $barriersAndSolutionsBusiness
-                                        (Какие главные риски? Как их минимизировать?)
-                                        Дополнительные разделы (сформируй их на основе ответов выше):
-                                        Анализ рынка (ниша, тренды, конкуренты).
-                                        Маркетинг и продвижение (каналы, бюджет).
-                                        Операционная деятельность (локация, оборудование, логистика).
-                                        Финансовый план (инвестиции, расходы, окупаемость).
-                                        KPI (ключевые метрики успеха)
-                                    """.trimIndent().toString()
+                                    content = prompt
                                 )
                             ),
                             temperature = 0.1,

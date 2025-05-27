@@ -33,4 +33,27 @@
     <string name="settingTheme_4">Rojo claro</string>
     <string name="settingTheme_5">Rojo oscuro</string>
     <string name="settingTheme_6">Verde claro</string>
+    <string name="business_plan_template">
+    Genera un plan de negocio detallado respondiendo secuencialmente a 5 preguntas clave. Con base en las respuestas, elabora un documento estructurado con análisis, estrategias y cálculos financieros.
+    También incluye una tabla del plan financiero usando markdown.
+
+    1. Nombre del negocio: %1$s
+    2. Concepto del negocio: %2$s
+    (¿A qué se dedicará la empresa? Describe brevemente el producto o servicio.)
+    3. Público objetivo: %3$s
+    (¿Quiénes son los principales clientes? Su edad, ingresos y necesidades.)
+    4. Ventajas competitivas: %4$s
+    (¿Por qué los clientes elegirán este negocio? Características únicas.)
+    5. Modelo de monetización: %5$s
+    (¿Cómo generará ingresos el negocio? Principales fuentes de ingresos, precios.)
+    6. Barreras y soluciones: %6$s
+    (¿Cuáles son los principales riesgos? ¿Cómo minimizarlos?)
+
+    Secciones adicionales (genérelas en base a las respuestas anteriores):
+    - Análisis de mercado (nicho, tendencias, competidores)
+    - Marketing y promoción (canales, presupuesto)
+    - Operaciones (ubicación, equipo, logística)
+    - Plan financiero (inversiones, gastos, rentabilidad)
+    - Indicadores clave (KPIs)
+    </string>
 </resources>
