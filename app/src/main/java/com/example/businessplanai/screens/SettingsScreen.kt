@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.businessplanai.ui.theme.AppTheme
 import com.example.businessplanai.viewModel.SettingViewModel
+import com.example.businessplanai.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,9 +67,12 @@ fun Settings(
     ) {
         items(1) {
             Spacer(modifier = Modifier.padding(top = 16.dp))
-            Text("Адрес вашего сервера LM-studio", color = MaterialTheme.colorScheme.background)
             Text(
-                "Укажите адресс сервера и не забдьте указать порт(последние 4 цифры).",
+                stringResource(R.string.settingDescription_1),
+                color = MaterialTheme.colorScheme.background
+            )
+            Text(
+                stringResource(R.string.settingDescription_2),
                 color = MaterialTheme.colorScheme.background,
                 fontSize = 15.sp
             )
@@ -131,16 +136,19 @@ fun Settings(
         }
         items(1) {
 
-            Text("Темы приложения", color = MaterialTheme.colorScheme.background)
+            Text(
+                stringResource(R.string.settingThemeTitle),
+                color = MaterialTheme.colorScheme.background
+            )
 
             val options = listOf(
-                AppTheme.SYSTEM to "Системная",
-                AppTheme.LIGHT to "Светлая",
-                AppTheme.DARK to "Тёмная",
-                AppTheme.LIGHTRed to "Светлая красная",
-                AppTheme.DARKRed to "Тёмная красная",
-                AppTheme.LIGHTGreen to "Светлая зелёная",
-                AppTheme.DARKGreen to "Тёмная зелёная"
+                AppTheme.SYSTEM to stringResource(R.string.settingTheme_1),
+                AppTheme.LIGHT to stringResource(R.string.settingTheme_2),
+                AppTheme.DARK to stringResource(R.string.settingTheme_3),
+                AppTheme.LIGHTRed to  stringResource(R.string.settingTheme_4),
+                AppTheme.DARKRed to stringResource(R.string.settingTheme_5),
+                AppTheme.LIGHTGreen to  stringResource(R.string.settingTheme_6),
+                AppTheme.DARKGreen to stringResource(R.string.settingTheme_7),
             )
 
 

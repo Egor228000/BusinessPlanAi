@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.businessplanai.R
@@ -104,7 +105,7 @@ fun NotesAdaptiveScreen(
 
                             title = {
                                 Text(
-                                    "Просмотр",
+                                    stringResource(R.string.titleWatch),
                                     color = MaterialTheme.colorScheme.background,
 
                                     )
@@ -204,7 +205,10 @@ fun NotesAdaptiveScreen(
                             .padding(32.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Выберите заметку", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            stringResource(R.string.businessCardSelectedNote),
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     }
                 }
             }
@@ -212,27 +216,22 @@ fun NotesAdaptiveScreen(
     } else {
         // Маленький экран
 
-
-
-            Main(
-                padding,
-                mainViewModel,
-                navigation,
-                onNoteSelected = { id ->
-                    navigation.navigate("${ScreenRoute.Watch.route}/$id")
-                },
-                onDeleteClick = { deletedId ->
-                    mainViewModel.deleteBusiness(deletedId)
-                },
-                onDeleteSelectedNote = { deletedId ->
-                    if (selectedNoteId == deletedId) {
-                        selectedNoteId = null
-                    }
-                },
-                listState
-            )
-
-
-
+        Main(
+            padding,
+            mainViewModel,
+            navigation,
+            onNoteSelected = { id ->
+                navigation.navigate("${ScreenRoute.Watch.route}/$id")
+            },
+            onDeleteClick = { deletedId ->
+                mainViewModel.deleteBusiness(deletedId)
+            },
+            onDeleteSelectedNote = { deletedId ->
+                if (selectedNoteId == deletedId) {
+                    selectedNoteId = null
+                }
+            },
+            listState
+        )
     }
 }

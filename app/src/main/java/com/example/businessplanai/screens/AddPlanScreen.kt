@@ -1,6 +1,5 @@
 package com.example.businessplanai.screens
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -25,8 +24,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -42,6 +39,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -53,6 +51,7 @@ import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.example.businessplanai.R
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -62,26 +61,26 @@ fun AddPlan(
     navigation: NavHostController,
     settingViewModel: SettingViewModel
 ) {
+    // Для TExtFields
     var nameBusiness by remember { mutableStateOf("") }
     var pointBusiness by remember { mutableStateOf("") }
     var auditoriumBusiness by remember { mutableStateOf("") }
     var advantagesBusiness by remember { mutableStateOf("") }
     var monetizationBusiness by remember { mutableStateOf("") }
     var barriersAndSolutionsBusiness by remember { mutableStateOf("") }
+    val focus = LocalFocusManager.current
+
+    // Загрузка и включение анимации
     val isLoading = addViewModel.isLoading.collectAsState()
     val isLoadingNavigate = addViewModel.isLoadingNavigate.collectAsState()
-    val focus = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    // ПРоверка подключения
     val isConnected by addViewModel.isConnected.collectAsState()
     val ipAdress by settingViewModel.serverIp.collectAsState()
-    val activity = LocalContext.current
-    val windowSizeClass = calculateWindowSizeClass(activity as Activity)
-    var paddingVertical = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 32.dp
-        WindowWidthSizeClass.Medium -> 32.dp
-        else -> 32.dp
-    }
+
+
+
     LaunchedEffect(isConnected) {
         if (!isConnected) {
             delay(2000)
@@ -106,7 +105,7 @@ fun AddPlan(
 
 
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(paddingVertical),
+            verticalArrangement = Arrangement.spacedBy(32.dp),
             modifier = Modifier
                 .padding(bottom = 70.dp)
 
@@ -115,7 +114,7 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     nameBusiness,
                     {nameBusiness = it},
-                    "Названии компании",
+                    stringResource(R.string.fieldCustomText_1),
                     focus
                 )
 
@@ -124,7 +123,8 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     pointBusiness,
                     {pointBusiness = it},
-                    "Суть бизнеса",
+                    stringResource(R.string.fieldCustomText_2),
+
                     focus
                 )
             }
@@ -133,7 +133,7 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     auditoriumBusiness,
                     {auditoriumBusiness = it},
-                    "Целевая аудитория",
+                    stringResource(R.string.fieldCustomText_3),
                     focus
                 )
             }
@@ -141,7 +141,7 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     advantagesBusiness,
                     {advantagesBusiness = it},
-                    "Конкурентные преимущества",
+                    stringResource(R.string.fieldCustomText_4),
                     focus
                 )
             }
@@ -149,7 +149,7 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     monetizationBusiness,
                     {monetizationBusiness = it},
-                    "Как будете зарабатывать?",
+                    stringResource(R.string.fieldCustomText_5),
                     focus
                 )
             }
@@ -157,7 +157,7 @@ fun AddPlan(
                 OutlinedTextFieldCustom(
                     barriersAndSolutionsBusiness,
                     {barriersAndSolutionsBusiness = it},
-                    "Какие будут минусы или проблемы",
+                    stringResource(R.string.fieldCustomText_6),
                     focus,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
@@ -200,7 +200,7 @@ fun AddPlan(
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
-                        "Сгенерировать план",
+                        stringResource(R.string.buttonText),
                         color = MaterialTheme.colorScheme.background,
                         fontSize = 18.sp
                     )

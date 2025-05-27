@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
@@ -145,7 +146,7 @@ fun Main(
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
-            title = { Text("Главная", color = MaterialTheme.colorScheme.background) },
+            title = { Text(stringResource(R.string.titleMain), color = MaterialTheme.colorScheme.background) },
             actions = {
                 IconButton(
                     onClick = {
@@ -176,7 +177,7 @@ fun Main(
             ),
             placeholder = {
                 Text(
-                    "Поиск",
+                    stringResource(R.string.titlePlaceholder),
                     color = MaterialTheme.colorScheme.surface,
                  fontSize = 23.sp
 
@@ -210,20 +211,7 @@ fun Main(
         ) {
             if (businessList.value.isEmpty()) {
                 items(1) {
-                    Text("Пока еще ничего нет", color = MaterialTheme.colorScheme.onSurface)
-                    /*val composition by rememberLottieComposition(
-                        LottieCompositionSpec.RawRes(
-                            if (MaterialTheme.colorScheme.background == BackgroundDark) {
-                                R.raw.empty_light
-                            } else {
-                                R.raw.empty_dark
-                            }
-                        )
-                    )
-                    LottieAnimation(
-                        composition,
-                        modifier = Modifier.fillMaxWidth(1f),
-                    )*/
+                    Text(stringResource(R.string.EmptyNote), color = MaterialTheme.colorScheme.onSurface)
                 }
             } else {
                 items(filteredList) { card ->
@@ -261,12 +249,12 @@ fun Main(
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
-                                "Вы действительно хотите удалить?",
+                                stringResource(R.string.dialogQuestion_1),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.background
                             )
                             Text(
-                                "Это действие необратимо",
+                                stringResource(R.string.dialogText),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.background
                             )
@@ -284,7 +272,10 @@ fun Main(
                                     .padding(end = 16.dp),
                                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
                             ) {
-                                Text("Нет, отмена", color = MaterialTheme.colorScheme.background)
+                                Text(
+                                    stringResource(R.string.dialogNo),
+                                    color = MaterialTheme.colorScheme.background
+                                )
                             }
 
                             Button(
@@ -296,7 +287,10 @@ fun Main(
                                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface),
                                 modifier = Modifier.widthIn(min = widthButton)
                             ) {
-                                Text("Да, удалить", color = MaterialTheme.colorScheme.background)
+                                Text(
+                                    stringResource(R.string.dialogYes),
+                                    color = MaterialTheme.colorScheme.background
+                                )
                             }
                         }
                     }
@@ -402,7 +396,7 @@ fun BusinessCard(
                         },
                         text = {
                             Text(
-                                "Редактировать",
+                                stringResource(R.string.businessCardEdit),
                                 color = MaterialTheme.colorScheme.background
                             )
                         },
@@ -420,7 +414,11 @@ fun BusinessCard(
                             expanded = false
                             onDeleteClick()
                         },
-                        text = { Text("Удалить", color = MaterialTheme.colorScheme.background) },
+                        text = {
+                            Text(
+                                stringResource(R.string.businessCardDelete),
+                                color = MaterialTheme.colorScheme.background)
+                               },
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Delete,

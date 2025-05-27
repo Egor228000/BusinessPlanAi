@@ -22,13 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.businessplanai.viewModel.EditViewModel
-
+import com.example.businessplanai.R
 @Composable
 fun EditPlan(
     padding: PaddingValues,
@@ -59,41 +60,17 @@ fun EditPlan(
         ) {
             items(1) {
                 Spacer(modifier = Modifier.padding(top = 16.dp))
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = { editViewModel.editedTitle.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Название",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
 
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(FocusDirection.Next) }
-                    )
-
+                OutlinedTextFieldCustom(
+                    title,
+                    {editViewModel.editedTitle.value = it},
+                    stringResource(R.string.fieldCustomText_1),
+                    focus
                 )
+
             }
             items(1) {
+
                 OutlinedTextField(
                     value = description,
                     onValueChange = { editViewModel.editedDescription.value = it },
@@ -108,7 +85,7 @@ fun EditPlan(
                     ),
                     placeholder = {
                         Text(
-                            "Бизнес план",
+                            stringResource(R.string.fieldCustomTextEdit_2),
                             color = MaterialTheme.colorScheme.surface,
                             fontSize = 20.sp
 

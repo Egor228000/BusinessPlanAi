@@ -35,7 +35,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -47,9 +49,12 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.businessplanai.navHost.NavigationHost
@@ -61,6 +66,7 @@ import com.example.businessplanai.viewModel.MainViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -90,7 +96,7 @@ class MainActivity : ComponentActivity() {
             val navigation = rememberNavController()
             val navBackStackEntry by navigation.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-            var expanded by remember { mutableStateOf(false) }
+            var expanded = remember { mutableStateOf(false) }
             val listState = rememberLazyListState()
 
             LaunchedEffect(Unit) {
@@ -100,9 +106,9 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(listState) {
                 snapshotFlow { listState.firstVisibleItemScrollOffset }.collect { offset ->
-                        mainViewModel.onScroll(offset - lastScrollOffset.toFloat())
-                        lastScrollOffset = offset
-                    }
+                    mainViewModel.onScroll(offset - lastScrollOffset.toFloat())
+                    lastScrollOffset = offset
+                }
             }
 
             theme.value?.let { actualTheme ->
@@ -115,201 +121,30 @@ class MainActivity : ComponentActivity() {
                             val fabVisible by mainViewModel.fabVisible.collectAsState()
                             when (currentRoute) {
                                 ScreenRoute.Adaptive.route -> {
-                                    AnimatedVisibility(
-                                        visible = fabVisible,
-                                        enter = fadeIn() + slideInVertically { it },
-                                        exit = fadeOut() + slideOutVertically { it }) {
-                                        FloatingActionButton(
-                                            onClick = { navigation.navigate(ScreenRoute.Add.route) },
-                                            containerColor = MaterialTheme.colorScheme.onSurface,
-                                            elevation = FloatingActionButtonDefaults.elevation(1.dp)
-                                        ) {
-                                            Icon(
-                                                Icons.Default.Add,
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.background,
-                                            )
-                                        }
-                                    }
+                                    FloatingActionButtonCustom(
+                                        navigation,
+                                        fabVisible
+                                    )
                                 }
                             }
                         },
                         containerColor = MaterialTheme.colorScheme.onPrimary,
                         topBar = {
                             when (currentRoute) {
-                                "${ScreenRoute.Edit.route}/{id}" -> {
-                                    TopAppBar(
-                                        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
-                                        title = {
-                                            Text(
-                                                "Редактирование",
-                                                color = MaterialTheme.colorScheme.background,
-                                            )
-                                        },
-                                        navigationIcon = {
-                                            IconButton(
-                                                onClick = { navigation.popBackStack() }) {
-                                                Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                        },
-                                        actions = {
-                                            IconButton(
-                                                onClick = {
-                                                    scope.launch {
-                                                        editViewModel.saveChanges()
-                                                    }
-                                                    navigation.popBackStack()
-                                                }) {
-                                                Icon(
-                                                    Icons.Default.Done,
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
-
-                                "${ScreenRoute.Watch.route}/{id}" -> {
-                                    TopAppBar(
-                                        colors = TopAppBarDefaults.topAppBarColors(
-                                            MaterialTheme.colorScheme.onPrimary
-                                        ),
-
-                                        title = {
-                                            Text(
-                                                "Просмотр",
-                                                color = MaterialTheme.colorScheme.background,
-
-                                                )
-                                        }, navigationIcon = {
-
-                                            IconButton(
-                                                onClick = { navigation.popBackStack() }) {
-                                                Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                        }, actions = {
-                                            IconButton(
-                                                onClick = {
-                                                    expanded = true
-                                                }) {
-                                                Icon(
-                                                    painter = painterResource(R.drawable.outline_arrow_downward_24),
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                            DropdownMenu(
-                                                expanded = expanded,
-                                                onDismissRequest = { expanded = false },
-                                                containerColor = MaterialTheme.colorScheme.onBackground
-                                            ) {
-                                                DropdownMenuItem(
-                                                    onClick = {
-                                                        scope.launch(Dispatchers.IO) {
-                                                            expanded = false
-
-                                                            watchViewModel.saveTextToDownloads(
-                                                                context,
-                                                                "Бизнес_план.pdf",
-                                                                "application/pdf",
-                                                                watchViewModel.getCurrentBusinessText()
-                                                            )
-                                                        }
-                                                    }, text = {
-                                                        Text(
-                                                            "PDF",
-                                                            color = MaterialTheme.colorScheme.background,
-                                                        )
-                                                    }, leadingIcon = {
-                                                        Icon(
-                                                            Icons.Default.Edit,
-                                                            contentDescription = null,
-                                                            tint = MaterialTheme.colorScheme.background
-                                                        )
-                                                    }, colors = MenuDefaults.itemColors(
-                                                        MaterialTheme.colorScheme.onBackground
-                                                    )
-                                                )
-                                                DropdownMenuItem(
-                                                    onClick = {
-                                                        scope.launch(Dispatchers.IO) {
-
-                                                            expanded = false
-                                                            watchViewModel.saveTextToDownloads(
-                                                                context = context,
-                                                                fileName = "бизнес_план.docx",
-                                                                mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                                                content = watchViewModel.getCurrentBusinessText()
-                                                            )
-                                                        }
-                                                    }, text = { Text("Word") }, leadingIcon = {
-                                                        Icon(
-                                                            Icons.Default.Delete,
-                                                            contentDescription = null,
-                                                            tint = MaterialTheme.colorScheme.background
-                                                        )
-                                                    }, colors = MenuDefaults.itemColors(
-                                                        MaterialTheme.colorScheme.background
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
-
-                                ScreenRoute.Add.route -> {
-                                    TopAppBar(
-                                        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
-                                        title = {
-                                            Text(
-                                                "Добавление безнесс плана",
-                                                color = MaterialTheme.colorScheme.background,
-                                            )
-                                        },
-                                        navigationIcon = {
-                                            IconButton(
-                                                onClick = { navigation.popBackStack() }) {
-                                                Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
-
-                                ScreenRoute.Settings.route -> {
-                                    TopAppBar(
-                                        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
-                                        title = {
-                                            Text(
-                                                "Настройки",
-                                                color = MaterialTheme.colorScheme.background,
-                                            )
-                                        },
-                                        navigationIcon = {
-                                            IconButton(
-                                                onClick = { navigation.popBackStack() }) {
-                                                Icon(
-                                                    Icons.AutoMirrored.Filled.ArrowBack,
-                                                    null,
-                                                    tint = MaterialTheme.colorScheme.background
-                                                )
-                                            }
-                                        }
+                                ScreenRoute.Adaptive.route -> {}
+                                else -> {
+                                    TopAppBarCustom(
+                                        navigation,
+                                        expanded,
+                                        currentRoute,
+                                        scope,
+                                        context,
+                                        watchViewModel,
+                                        editViewModel
                                     )
                                 }
                             }
+
                         },
                     ) { padding ->
                         NavigationHost(
@@ -320,12 +155,175 @@ class MainActivity : ComponentActivity() {
                             editViewModel,
                             watchViewModel,
                             settingViewModel,
-                            listState,
+                            listState
 
-                            )
+                        )
                     }
                 }
             }
         }
     }
 }
+
+
+@Composable
+fun FloatingActionButtonCustom(navigation: NavHostController, fabVisible: Boolean) {
+    AnimatedVisibility(
+        visible = fabVisible,
+        enter = fadeIn() + slideInVertically { it },
+        exit = fadeOut() + slideOutVertically { it }) {
+        FloatingActionButton(
+            onClick = { navigation.navigate(ScreenRoute.Add.route) },
+            containerColor = MaterialTheme.colorScheme.onSurface,
+            elevation = FloatingActionButtonDefaults.elevation(1.dp)
+        ) {
+            Icon(
+                Icons.Default.Add,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.background,
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarCustom(
+    navigation: NavHostController,
+    expanded: MutableState<Boolean>,
+    currentRoute: String?,
+    scope: CoroutineScope,
+    context: Application,
+    watchViewModel: WatchViewModel,
+    editViewModel: EditViewModel
+
+
+) {
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            MaterialTheme.colorScheme.onPrimary
+        ),
+
+        title = {
+            Text(
+                text = when (currentRoute) {
+                    "${ScreenRoute.Edit.route}/{id}" -> stringResource(R.string.titleEdit)
+                    "${ScreenRoute.Watch.route}/{id}" -> stringResource(R.string.titleWatch)
+                    ScreenRoute.Add.route -> stringResource(R.string.titleAdd)
+                    ScreenRoute.Settings.route -> stringResource(R.string.titleSetting)
+                    ScreenRoute.Adaptive.route -> stringResource(R.string.titleMain)
+                    else -> {
+                        ""
+                    }
+                },
+                color = MaterialTheme.colorScheme.background,
+
+                )
+        }, navigationIcon = {
+
+            when (currentRoute) {
+                ScreenRoute.Adaptive.route -> {}
+                else -> {
+                    IconButton(
+                        onClick = { navigation.popBackStack() }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            null,
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
+                }
+            }
+
+        }, actions = {
+            when (currentRoute) {
+                "${ScreenRoute.Edit.route}/{id}" -> {
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                editViewModel.saveChanges()
+                            }
+                            navigation.popBackStack()
+                        }) {
+                        Icon(
+                            Icons.Default.Done,
+                            null,
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
+                }
+
+                "${ScreenRoute.Watch.route}/{id}" -> {
+                    IconButton(
+                        onClick = {
+                            expanded.value = true
+                        }) {
+                        Icon(
+                            painter = painterResource(R.drawable.outline_arrow_downward_24),
+                            null,
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false },
+                        containerColor = MaterialTheme.colorScheme.onBackground
+                    ) {
+                        DropdownMenuItem(
+                            onClick = {
+                                scope.launch(Dispatchers.IO) {
+                                    expanded.value = false
+
+                                    watchViewModel.saveTextToDownloads(
+                                        context,
+                                        "Бизнес_план.pdf",
+                                        "application/pdf",
+                                        watchViewModel.getCurrentBusinessText()
+                                    )
+                                }
+                            }, text = {
+                                Text(
+                                    "PDF",
+                                    color = MaterialTheme.colorScheme.background,
+                                )
+                            }, leadingIcon = {
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+                            }, colors = MenuDefaults.itemColors(
+                                MaterialTheme.colorScheme.onBackground
+                            )
+                        )
+                        DropdownMenuItem(
+                            onClick = {
+                                scope.launch(Dispatchers.IO) {
+
+                                    expanded.value = false
+                                    watchViewModel.saveTextToDownloads(
+                                        context = context,
+                                        fileName = "бизнес_план.docx",
+                                        mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                        content = watchViewModel.getCurrentBusinessText()
+                                    )
+                                }
+                            }, text = { Text("Word") }, leadingIcon = {
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.background
+                                )
+                            }, colors = MenuDefaults.itemColors(
+                                MaterialTheme.colorScheme.background
+                            )
+                        )
+                    }
+                }
+            }
+
+        }
+    )
+}
+
