@@ -1,48 +1,48 @@
 <resources>
-    <string name="titleEdit">Редактирование</string>
-    <string name="titleWatch">Просмотр</string>
-    <string name="titleAdd">Добавление безнес плана</string>
-    <string name="titleSetting">Настройки</string>
-    <string name="titleMain">Главная</string>
+    <string name="titleEdit">Editing</string>
+    <string name="titleWatch">Viewing</string>
+    <string name="titleAdd">Adding a business plan</string>
+    <string name="titleSetting">Settings</string>
+    <string name="titleMain">Main</string>
 
-    <string name="titlePlaceholder">Поиск</string>
-    <string name="EmptyNote">Пока еще ничего нет</string>
+    <string name="titlePlaceholder">Search</string>
+    <string name="EmptyNote">There\'s nothing yet</string>
 
-    <string name="fieldCustomText_1">Название компании</string>
-    <string name="fieldCustomText_2">Суть бизнеса</string>
-    <string name="fieldCustomText_3">Целевая аудитория</string>
-    <string name="fieldCustomText_4">Конкурентные преимущества</string>
-    <string name="fieldCustomText_5">Как будете зарабатывать?</string>
-    <string name="fieldCustomText_6">Какие будут минусы или проблемы ?</string>
+    <string name="fieldCustomText_1">Company name</string>
+    <string name="fieldCustomText_2">The essence of business</string>
+    <string name="fieldCustomText_3">Target audience</string>
+    <string name="fieldCustomText_4">Competitive advantages</string>
+    <string name="fieldCustomText_5">How will you earn money?</string>
+    <string name="fieldCustomText_6">What are the disadvantages or problems?</string>
 
-    <string name="buttonText">Сгенерировать план</string>
+    <string name="buttonText">Generate plan</string>
 
-    <string name="fieldCustomTextEdit_2">Бизнес план</string>
+    <string name="fieldCustomTextEdit_2">Business plan</string>
 
 
-    <string name="dialogQuestion_1">Вы действительно хотите удалить ?</string>
-    <string name="dialogText">Это действие необратимо</string>
+    <string name="dialogQuestion_1">Do you really want to delete?</string>
+    <string name="dialogText">This action is irreversible</string>
 
-    <string name="dialogNo">Да, удалить</string>
-    <string name="dialogYes">Нет, отмена</string>
+    <string name="dialogNo">Yes, delete it</string>
+    <string name="dialogYes">No, cancellation</string>
 
-    <string name="businessCardEdit">Редактировать</string>
-    <string name="businessCardDelete">Удалить</string>
+    <string name="businessCardEdit">Edit</string>
+    <string name="businessCardDelete">Remove</string>
 
-    <string name="businessCardSelectedNote">Выберите заметку</string>
+    <string name="businessCardSelectedNote">Select a note</string>
 
-    <string name="settingDescription_1">Адрес вашего сервера в LM-Studio</string>
-    <string name="settingDescription_2">Укажите адресс сервера и не забдьте указать порт(последние 4 цифры)</string>
+    <string name="settingDescription_1">The address of your server in LM-Studio</string>
+    <string name="settingDescription_2">Specify the server address and do not forget to specify the port (last 4 digits)</string>
 
-    <string name="settingThemeTitle">Темы приложения</string>
+    <string name="settingThemeTitle">Application Themes</string>
 
-    <string name="settingTheme_1">Системная</string>
-    <string name="settingTheme_2">Светлая</string>
-    <string name="settingTheme_3">Тёмная</string>
-    <string name="settingTheme_4">Светло красная</string>
-    <string name="settingTheme_5">Тёмно красная</string>
-    <string name="settingTheme_6">Светло зелёная</string>
-    <string name="settingTheme_7">Тёмно зелёная</string>
+    <string name="settingTheme_1">"System "</string>
+    <string name="settingTheme_2">Light</string>
+    <string name="settingTheme_3">Dark</string>
+    <string name="settingTheme_4">Light red</string>
+    <string name="settingTheme_5">Dark red</string>
+    <string name="settingTheme_6">Light green</string>
+    <string name="settingTheme_7">Dark green</string>
 
 
 
