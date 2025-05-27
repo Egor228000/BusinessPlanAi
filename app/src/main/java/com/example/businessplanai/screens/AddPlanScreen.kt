@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -111,215 +112,58 @@ fun AddPlan(
 
         ) {
             items(1) {
-                OutlinedTextField(
-                    value = nameBusiness,
-                    onValueChange = { nameBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Названии компании",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(focusDirection = FocusDirection.Next) }
-                    ),
+                OutlinedTextFieldCustom(
+                    nameBusiness,
+                    {nameBusiness = it},
+                    "Названии компании",
+                    focus
                 )
 
             }
             items(1) {
-                OutlinedTextField(
-                    value = pointBusiness,
-                    onValueChange = { pointBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Суть бизнеса",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(focusDirection = FocusDirection.Next) }
-                    ),
+                OutlinedTextFieldCustom(
+                    pointBusiness,
+                    {pointBusiness = it},
+                    "Суть бизнеса",
+                    focus
                 )
             }
 
             items(1) {
-                OutlinedTextField(
-                    value = auditoriumBusiness,
-                    onValueChange = { auditoriumBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Целевая аудитория",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(focusDirection = FocusDirection.Next) }
-                    ),
+                OutlinedTextFieldCustom(
+                    auditoriumBusiness,
+                    {auditoriumBusiness = it},
+                    "Целевая аудитория",
+                    focus
                 )
-
             }
             items(1) {
-                OutlinedTextField(
-                    value = advantagesBusiness,
-                    onValueChange = { advantagesBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Конкурентные преимущества",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(focusDirection = FocusDirection.Next) }
-                    ),
+                OutlinedTextFieldCustom(
+                    advantagesBusiness,
+                    {advantagesBusiness = it},
+                    "Конкурентные преимущества",
+                    focus
                 )
-
             }
             items(1) {
-                OutlinedTextField(
-                    value = monetizationBusiness,
-                    onValueChange = { monetizationBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Как будете зарабатывать?",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(focusDirection = FocusDirection.Next) }
-                    ),
+                OutlinedTextFieldCustom(
+                    monetizationBusiness,
+                    {monetizationBusiness = it},
+                    "Как будете зарабатывать?",
+                    focus
                 )
-
-
             }
             items(1) {
-                OutlinedTextField(
-                    value = barriersAndSolutionsBusiness,
-                    onValueChange = { barriersAndSolutionsBusiness = it },
-                    modifier = Modifier
-                        .fillMaxWidth(1f),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
-                        unfocusedBorderColor = Color(0x00FFFFFF),
-                        focusedBorderColor = Color(0x00FFFFFF),
-                    ),
-                    placeholder = {
-                        Text(
-                            "Какие будут минусы или проблемы",
-                            color = MaterialTheme.colorScheme.surface,
-                            fontSize = 20.sp
-
-                        )
-                    },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 20.sp
-                    ),
-                    maxLines = 1,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
+                OutlinedTextFieldCustom(
+                    barriersAndSolutionsBusiness,
+                    {barriersAndSolutionsBusiness = it},
+                    "Какие будут минусы или проблемы",
+                    focus,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(
-                        onDone = { focus.clearFocus(force = true) }
-                    ),
+                        onDone = { focus.clearFocus(true) }
+                    )
                 )
-
             }
 
         }
@@ -383,4 +227,45 @@ fun AddPlan(
             }
         }
     }
+}
+
+
+@Composable
+fun OutlinedTextFieldCustom(
+    textValue: String,
+    textOnValueChange: (String) -> Unit,
+    textPlaceholder: String, focus: FocusManager,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    keyboardActions: KeyboardActions = KeyboardActions(
+        onNext = { focus.moveFocus(FocusDirection.Next) }
+    )
+) {
+    OutlinedTextField(
+        value = textValue,
+        onValueChange = textOnValueChange,
+        modifier = Modifier
+            .fillMaxWidth(1f),
+        shape = RoundedCornerShape(10.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedContainerColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedBorderColor = Color(0x00FFFFFF),
+            focusedBorderColor = Color(0x00FFFFFF),
+        ),
+        placeholder = {
+            Text(
+                textPlaceholder,
+                color = MaterialTheme.colorScheme.surface,
+                fontSize = 20.sp
+
+            )
+        },
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.background,
+            fontSize = 20.sp
+        ),
+        maxLines = 1,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
+    )
 }
