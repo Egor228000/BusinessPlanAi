@@ -73,6 +73,12 @@ fun NotesAdaptiveScreen(
         val context = LocalContext.current
         Row(
             modifier = Modifier
+            // git stash save "временное сохранение"
+            // git pull origin main --rebase
+            // git stash pop
+            //git push origin main
+            //
+            //
         ) {
             Box(
                 modifier = Modifier
