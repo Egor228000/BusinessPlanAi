@@ -34,7 +34,6 @@ import com.example.businessplanai.R
 fun EditPlan(
     padding: PaddingValues,
     editViewModel: EditViewModel,
-    navigation: NavHostController,
     id: Int?
 ) {
     val focus = LocalFocusManager.current

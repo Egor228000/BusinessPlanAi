@@ -72,7 +72,6 @@ fun NavigationHost(
             EditPlan(
                 padding,
                 editViewModel,
-                navigation,
                 id
             )
         }
@@ -84,7 +83,6 @@ fun NavigationHost(
             Watch(
                 padding,
                 watchViewModel,
-                navigation,
                 id,
                 listState
             )
@@ -101,7 +99,6 @@ fun NavigationHost(
 
         composable(ScreenRoute.Settings.route) {
             Settings(
-                navigation,
                 padding,
                 settingViewModel
             )

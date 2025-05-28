@@ -217,15 +217,12 @@ fun Main(
                 items(filteredList) { card ->
                     Spacer(modifier = Modifier.padding(top = 16.dp))
                     BusinessCard(
-                        navigation,
-                        card.id,
                         card.title,
                         card.description,
                         onClick = { onNoteSelected(card.id) }, // ➜ адаптивное поведение
                         onEditClick = { navigation.navigate("${ScreenRoute.Edit.route}/${card.id}") },
                         onDeleteClick = { deleteCard.value = card.id },
                         fontSizeText,
-                        sizeHeight,
                         displayText
                     )
                 }
@@ -303,15 +300,12 @@ fun Main(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BusinessCard(
-    navigation: NavHostController,
-    id: Int,
     title: String,
     description: String,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     fontSizeText: TextUnit,
-    sizeHeight: Dp,
     displayText: Int
 ) {
     var expanded by remember { mutableStateOf(false) }

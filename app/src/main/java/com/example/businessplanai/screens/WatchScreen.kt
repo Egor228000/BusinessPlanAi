@@ -32,7 +32,6 @@ import com.mikepenz.markdown.model.DefaultMarkdownTypography
 fun Watch(
     padding: PaddingValues,
     watchViewModel: WatchViewModel,
-    navigation: NavHostController,
     id: Int?,
     listState: LazyListState
 ) {

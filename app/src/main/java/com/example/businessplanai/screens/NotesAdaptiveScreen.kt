@@ -193,7 +193,6 @@ fun NotesAdaptiveScreen(
                         Watch(
                             padding,
                             watchViewModel,
-                            navigation,
                             id = selectedNoteId,
                             listState
                         )

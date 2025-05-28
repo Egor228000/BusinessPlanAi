@@ -45,7 +45,6 @@ import com.example.businessplanai.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(
-    navigation: NavHostController,
     padding: PaddingValues,
     settingViewModel: SettingViewModel
 ) {
