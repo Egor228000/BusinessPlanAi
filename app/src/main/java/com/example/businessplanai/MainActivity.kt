@@ -1,6 +1,6 @@
 package com.example.businessplanai
 
-import android.app.Application
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,35 +13,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,16 +37,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.example.businessplanai.navHost.NavigationHost
-import com.example.businessplanai.routes.ScreenRoute
+import androidx.navigation3.runtime.rememberNavBackStack
+import com.example.businessplanai.navDisplay.AddScreenNav
+import com.example.businessplanai.navDisplay.MainScreenNav
+import com.example.businessplanai.navDisplay.NavigationHost
+import com.example.businessplanai.navDisplay.WatchScreenNav
 import com.example.businessplanai.ui.theme.BusinessPlanAITheme
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.EditViewModel
@@ -66,9 +52,6 @@ import com.example.businessplanai.viewModel.MainViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
 import com.example.businessplanai.viewModel.WatchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -83,6 +66,8 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
+            val backStack = rememberNavBackStack(MainScreenNav)
+
             val settingViewModel: SettingViewModel = hiltViewModel()
             val mainViewModel: MainViewModel = hiltViewModel()
             val addViewModel: AddViewModel = hiltViewModel()
@@ -90,13 +75,8 @@ class MainActivity : ComponentActivity() {
             val watchViewModel: WatchViewModel = hiltViewModel()
 
             val theme = settingViewModel.appTheme.collectAsState()
-            val context = LocalContext.current.applicationContext as Application
             val scope = rememberCoroutineScope()
 
-            val navigation = rememberNavController()
-            val navBackStackEntry by navigation.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-            var expanded = remember { mutableStateOf(false) }
             val listState = rememberLazyListState()
 
             LaunchedEffect(Unit) {
@@ -110,53 +90,57 @@ class MainActivity : ComponentActivity() {
                     lastScrollOffset = offset
                 }
             }
-
+            val activity = LocalContext.current
+            val windowSizeClass = calculateWindowSizeClass(activity as Activity)
+            var state = when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> false
+                WindowWidthSizeClass.Medium -> true
+                else -> true
+            }
             theme.value?.let { actualTheme ->
                 BusinessPlanAITheme(
                     appTheme = actualTheme
                 ) {
                     Scaffold(
-                        modifier = Modifier.imePadding(),
+                        contentWindowInsets = WindowInsets(),
+                        modifier = Modifier
+                            .imePadding(),
                         floatingActionButton = {
                             val fabVisible by mainViewModel.fabVisible.collectAsState()
-                            when (currentRoute) {
-                                ScreenRoute.Adaptive.route -> {
-                                    FloatingActionButtonCustom(
-                                        navigation,
-                                        fabVisible
-                                    )
+                            when (backStack.lastOrNull()) {
+
+                                is MainScreenNav -> {
+
+                                        FloatingActionButtonCustom(
+                                            onNavigateAdd = { backStack.add(AddScreenNav) },
+                                            fabVisible = fabVisible
+                                        )
+
                                 }
+                                is WatchScreenNav -> {
+                                    if (state) {
+                                        FloatingActionButtonCustom(
+                                            onNavigateAdd = { backStack.add(AddScreenNav) },
+                                            fabVisible = fabVisible
+                                        )
+                                    }
+                                }
+                                else -> {}
+
                             }
                         },
                         containerColor = MaterialTheme.colorScheme.onPrimary,
-                        topBar = {
-                            when (currentRoute) {
-                                ScreenRoute.Adaptive.route -> {}
-                                else -> {
-                                    TopAppBarCustom(
-                                        navigation,
-                                        expanded,
-                                        currentRoute,
-                                        scope,
-                                        context,
-                                        watchViewModel,
-                                        editViewModel
-                                    )
-                                }
-                            }
-
-                        },
                     ) { padding ->
                         NavigationHost(
-                            navigation,
                             padding,
                             mainViewModel,
                             addViewModel,
                             editViewModel,
                             watchViewModel,
                             settingViewModel,
-                            listState
-
+                            listState,
+                            backStack,
+                            scope,
                         )
                     }
                 }
@@ -167,18 +151,21 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun FloatingActionButtonCustom(navigation: NavHostController, fabVisible: Boolean) {
+fun FloatingActionButtonCustom(
+    onNavigateAdd: () -> Unit,
+    fabVisible: Boolean
+) {
     AnimatedVisibility(
         visible = fabVisible,
         enter = fadeIn() + slideInVertically { it },
         exit = fadeOut() + slideOutVertically { it }) {
         FloatingActionButton(
-            onClick = { navigation.navigate(ScreenRoute.Add.route) },
+            onClick = onNavigateAdd,
             containerColor = MaterialTheme.colorScheme.onSurface,
             elevation = FloatingActionButtonDefaults.elevation(1.dp)
         ) {
             Icon(
-                Icons.Default.Add,
+                painter = painterResource(R.drawable.baseline_add_24),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.background,
             )
@@ -186,144 +173,4 @@ fun FloatingActionButtonCustom(navigation: NavHostController, fabVisible: Boolea
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarCustom(
-    navigation: NavHostController,
-    expanded: MutableState<Boolean>,
-    currentRoute: String?,
-    scope: CoroutineScope,
-    context: Application,
-    watchViewModel: WatchViewModel,
-    editViewModel: EditViewModel
-
-
-) {
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            MaterialTheme.colorScheme.onPrimary
-        ),
-
-        title = {
-            Text(
-                text = when (currentRoute) {
-                    "${ScreenRoute.Edit.route}/{id}" -> stringResource(R.string.titleEdit)
-                    "${ScreenRoute.Watch.route}/{id}" -> stringResource(R.string.titleWatch)
-                    ScreenRoute.Add.route -> stringResource(R.string.titleAdd)
-                    ScreenRoute.Settings.route -> stringResource(R.string.titleSetting)
-                    ScreenRoute.Adaptive.route -> stringResource(R.string.titleMain)
-                    else -> {
-                        ""
-                    }
-                },
-                color = MaterialTheme.colorScheme.background,
-
-                )
-        }, navigationIcon = {
-
-            when (currentRoute) {
-                ScreenRoute.Adaptive.route -> {}
-                else -> {
-                    IconButton(
-                        onClick = { navigation.popBackStack() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            null,
-                            tint = MaterialTheme.colorScheme.background
-                        )
-                    }
-                }
-            }
-
-        }, actions = {
-            when (currentRoute) {
-                "${ScreenRoute.Edit.route}/{id}" -> {
-                    IconButton(
-                        onClick = {
-                            scope.launch {
-                                editViewModel.saveChanges()
-                            }
-                            navigation.popBackStack()
-                        }) {
-                        Icon(
-                            Icons.Default.Done,
-                            null,
-                            tint = MaterialTheme.colorScheme.background
-                        )
-                    }
-                }
-
-                "${ScreenRoute.Watch.route}/{id}" -> {
-                    IconButton(
-                        onClick = {
-                            expanded.value = true
-                        }) {
-                        Icon(
-                            painter = painterResource(R.drawable.outline_arrow_downward_24),
-                            null,
-                            tint = MaterialTheme.colorScheme.background
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded.value,
-                        onDismissRequest = { expanded.value = false },
-                        containerColor = MaterialTheme.colorScheme.onBackground
-                    ) {
-                        DropdownMenuItem(
-                            onClick = {
-                                scope.launch(Dispatchers.IO) {
-                                    expanded.value = false
-
-                                    watchViewModel.saveTextToDownloads(
-                                        context,
-                                        "Бизнес_план.pdf",
-                                        "application/pdf",
-                                        watchViewModel.getCurrentBusinessText()
-                                    )
-                                }
-                            }, text = {
-                                Text(
-                                    "PDF",
-                                    color = MaterialTheme.colorScheme.background,
-                                )
-                            }, leadingIcon = {
-                                Icon(
-                                    Icons.Default.Edit,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }, colors = MenuDefaults.itemColors(
-                                MaterialTheme.colorScheme.onBackground
-                            )
-                        )
-                        DropdownMenuItem(
-                            onClick = {
-                                scope.launch(Dispatchers.IO) {
-
-                                    expanded.value = false
-                                    watchViewModel.saveTextToDownloads(
-                                        context = context,
-                                        fileName = "бизнес_план.docx",
-                                        mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                        content = watchViewModel.getCurrentBusinessText()
-                                    )
-                                }
-                            }, text = { Text("Word") }, leadingIcon = {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.background
-                                )
-                            }, colors = MenuDefaults.itemColors(
-                                MaterialTheme.colorScheme.background
-                            )
-                        )
-                    }
-                }
-            }
-
-        }
-    )
-}
 

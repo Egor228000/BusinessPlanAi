@@ -2,15 +2,16 @@ package com.example.businessplanai.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,10 +20,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +45,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -46,20 +53,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.NavHostController
+import com.example.businessplanai.R
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.example.businessplanai.R
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AddPlan(
-    padding: PaddingValues,
     addViewModel: AddViewModel,
-    navigation: NavHostController,
-    settingViewModel: SettingViewModel
+    settingViewModel: SettingViewModel,
+    onBack: () -> Unit
 ) {
     // Для TExtFields
     var nameBusiness by remember { mutableStateOf("") }
@@ -93,139 +98,164 @@ fun AddPlan(
             }
         }
     }
-
-    Box(
+    Column(
         modifier = Modifier
-            .padding(padding)
+            .navigationBarsPadding()
+            .background(MaterialTheme.colorScheme.onPrimary,)
 
-            .padding(top = 16.dp)
-            .padding(16.dp)
-            .fillMaxSize()
     ) {
-
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(32.dp),
-            modifier = Modifier
-                .padding(bottom = 70.dp)
-
-        ) {
-            items(1) {
-                OutlinedTextFieldCustom(
-                    nameBusiness,
-                    {nameBusiness = it},
-                    stringResource(R.string.fieldCustomText_1),
-                    focus
-                )
-
-            }
-            items(1) {
-                OutlinedTextFieldCustom(
-                    pointBusiness,
-                    {pointBusiness = it},
-                    stringResource(R.string.fieldCustomText_2),
-
-                    focus
-                )
-            }
-
-            items(1) {
-                OutlinedTextFieldCustom(
-                    auditoriumBusiness,
-                    {auditoriumBusiness = it},
-                    stringResource(R.string.fieldCustomText_3),
-                    focus
-                )
-            }
-            items(1) {
-                OutlinedTextFieldCustom(
-                    advantagesBusiness,
-                    {advantagesBusiness = it},
-                    stringResource(R.string.fieldCustomText_4),
-                    focus
-                )
-            }
-            items(1) {
-                OutlinedTextFieldCustom(
-                    monetizationBusiness,
-                    {monetizationBusiness = it},
-                    stringResource(R.string.fieldCustomText_5),
-                    focus
-                )
-            }
-            items(1) {
-                OutlinedTextFieldCustom(
-                    barriersAndSolutionsBusiness,
-                    {barriersAndSolutionsBusiness = it},
-                    stringResource(R.string.fieldCustomText_6),
-                    focus,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { focus.clearFocus(true) }
-                    )
-                )
-            }
-
-        }
-        Spacer(modifier = Modifier)
-        Column(
-            verticalArrangement = Arrangement.Bottom,
-            modifier = Modifier.fillMaxHeight(1f)
-        ) {
-            if (!isLoading.value) {
-                val context = LocalContext.current
-                val resources = context.resources
-                Button(
-                    elevation = ButtonDefaults.buttonElevation(1.dp),
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                MaterialTheme.colorScheme.onPrimary
+            ),
+            title = {
+                Text(text = stringResource(R.string.titleAdd),  color = MaterialTheme.colorScheme.background,)
+            },
+            navigationIcon =  {
+                IconButton(
                     onClick = {
 
-                        scope.launch {
-                            addViewModel.getFullChatResponse(
-                                nameBusiness,
-                                pointBusiness,
-                                auditoriumBusiness,
-                                advantagesBusiness,
-                                monetizationBusiness,
-                                barriersAndSolutionsBusiness,
-                                ipAdress,
-                                resources
-                            )
-                        }
-                    },
-                    colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.onSurface),
-                    modifier = Modifier
-                        .height(50.dp)
-                        .fillMaxWidth(1f),
-                    enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected),
-                    border = BorderStroke(
-                        1.dp,
-                        MaterialTheme.colorScheme.onSurface
-                    ),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.buttonText),
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 18.sp
+                        onBack()
+                    }) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_arrow_back_24),
+                        null,
+                        tint = MaterialTheme.colorScheme.background
                     )
                 }
-                if (isLoadingNavigate.value) {
-                    navigation.popBackStack()
-                }
-            } else if (isLoading.value) {
-                Dialog(
-                    onDismissRequest = {},
-                    properties = DialogProperties()
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize(1f)
-                    ) {
-                        CircularProgressIndicator(
-                           color = MaterialTheme.colorScheme.onSurface,
-                        )
+            }
+        )
+        Box(
+            modifier = Modifier
 
+                .padding(top = 16.dp)
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                modifier = Modifier
+                    .padding(bottom = 70.dp)
+
+            ) {
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        nameBusiness,
+                        { nameBusiness = it },
+                        stringResource(R.string.fieldCustomText_1),
+                        focus
+                    )
+
+                }
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        pointBusiness,
+                        { pointBusiness = it },
+                        stringResource(R.string.fieldCustomText_2),
+
+                        focus
+                    )
+                }
+
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        auditoriumBusiness,
+                        { auditoriumBusiness = it },
+                        stringResource(R.string.fieldCustomText_3),
+                        focus
+                    )
+                }
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        advantagesBusiness,
+                        { advantagesBusiness = it },
+                        stringResource(R.string.fieldCustomText_4),
+                        focus
+                    )
+                }
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        monetizationBusiness,
+                        { monetizationBusiness = it },
+                        stringResource(R.string.fieldCustomText_5),
+                        focus
+                    )
+                }
+                items(1) {
+                    OutlinedTextFieldCustom(
+                        barriersAndSolutionsBusiness,
+                        { barriersAndSolutionsBusiness = it },
+                        stringResource(R.string.fieldCustomText_6),
+                        focus,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focus.clearFocus(true) }
+                        )
+                    )
+                }
+
+            }
+            Spacer(modifier = Modifier)
+            Column(
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.fillMaxHeight(1f)
+            ) {
+                if (!isLoading.value) {
+                    val context = LocalContext.current
+                    val resources = context.resources
+                    Button(
+                        elevation = ButtonDefaults.buttonElevation(1.dp),
+                        onClick = {
+
+                            scope.launch {
+                                addViewModel.getFullChatResponse(
+                                    nameBusiness,
+                                    pointBusiness,
+                                    auditoriumBusiness,
+                                    advantagesBusiness,
+                                    monetizationBusiness,
+                                    barriersAndSolutionsBusiness,
+                                    ipAdress,
+                                    resources
+                                )
+                            }
+                        },
+                        colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.onSurface),
+                        modifier = Modifier
+                            .height(50.dp)
+                            .fillMaxWidth(1f),
+                        enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected),
+                        border = BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.onSurface
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.buttonText),
+                            color = MaterialTheme.colorScheme.background,
+                            fontSize = 18.sp
+                        )
+                    }
+                    if (isLoadingNavigate.value) {
+                        onBack
+                    }
+                } else if (isLoading.value) {
+                    Dialog(
+                        onDismissRequest = {},
+                        properties = DialogProperties()
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize(1f)
+                        ) {
+                            CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+
+                        }
                     }
                 }
             }

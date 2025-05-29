@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,12 +21,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -65,29 +58,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.NavHostController
 import com.example.businessplanai.R
-import com.example.businessplanai.routes.ScreenRoute
 import com.example.businessplanai.viewModel.MainViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Main(
-    padding: PaddingValues,
     mainViewModel: MainViewModel,
-    navigation: NavHostController,
-    onNoteSelected: (Int) -> Unit,
-    onDeleteClick: (Int) -> Unit, // ✅ исправлено
-    onDeleteSelectedNote: (Int) -> Unit = {},
-    listState: LazyListState
+    listState: LazyListState,
+    onNavigateWatch: (Int) -> Unit,
+    onEditClick: (Int) -> Unit,
+    onDeleteClick: (Int) -> Unit,
+    onNavigateSetting: () -> Unit
 ) {
+
+
     val businessList = mainViewModel.businessList.collectAsState()//
     var deleteCard = remember { mutableStateOf<Int?>(null) }
     val listStateTwo = rememberLazyListState()
@@ -114,9 +105,9 @@ fun Main(
     }
 
     var displayText = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 30
-        WindowWidthSizeClass.Medium -> 20
-        else -> 19
+        WindowWidthSizeClass.Compact -> 35
+        WindowWidthSizeClass.Medium -> 80
+        else -> 80
     }
 
     // Dialog size
@@ -134,40 +125,114 @@ fun Main(
     var searcchBusinessCard by remember { mutableStateOf("") }
 
 
-        val filteredList = businessList.value.filter {
-            it.title.contains(searcchBusinessCard, ignoreCase = true)
+    val filteredList = businessList.value.filter {
+        it.title.contains(searcchBusinessCard, ignoreCase = true)
 
-        }
+    }
 
     var focus = LocalFocusManager.current
+    deleteCard.value?.let { cardId ->
+        Dialog(
+            onDismissRequest = { deleteCard.value = null },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(widthFill)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onBackground)
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.dialogQuestion_1),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.background
+                        )
+                        Text(
+                            stringResource(R.string.dialogText),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.background
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextButton(
+                            onClick = { deleteCard.value = null },
+                            modifier = Modifier
+                                .alpha(0.6f)
+                                .padding(end = 16.dp),
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
+                        ) {
+                            Text(
+                                stringResource(R.string.dialogYes),
+                                color = MaterialTheme.colorScheme.background
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+                                mainViewModel.deleteBusiness(cardId)
+                                onDeleteClick(cardId)
+                                deleteCard.value = null
+                            },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface),
+                            modifier = Modifier.widthIn(min = widthButton)
+                        ) {
+                            Text(
+                                stringResource(R.string.dialogNo),
+                                color = MaterialTheme.colorScheme.background
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
+            .navigationBarsPadding()
+            .background(MaterialTheme.colorScheme.onPrimary,)
+
 
     ) {
         TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.onPrimary),
-            title = { Text(stringResource(R.string.titleMain), color = MaterialTheme.colorScheme.background) },
-            actions = {
+            colors = TopAppBarDefaults.topAppBarColors(
+                MaterialTheme.colorScheme.onPrimary
+            ),
+            title = {
+                Text(text = stringResource(R.string.titleMain),  color = MaterialTheme.colorScheme.background,)
+            },
+            actions =  {
                 IconButton(
                     onClick = {
-                        navigation.navigate(ScreenRoute.Settings.route)
-                    }
-                ) {
+                        onNavigateSetting()
+                    }) {
                     Icon(
-                        Icons.Default.Settings, null,
+                        painter = painterResource(R.drawable.baseline_settings_24),
+                        null,
                         tint = MaterialTheme.colorScheme.background
                     )
                 }
             }
+
         )
         Spacer(modifier = Modifier.padding(top = 16.dp))
         OutlinedTextField(
             value = searcchBusinessCard,
             onValueChange = { searcchBusinessCard = it },
             modifier = Modifier
+                .fillMaxWidth(1f)
                 .padding(start = 16.dp, end = 16.dp)
 
-                .fillMaxWidth(1f),
+            ,
             shape = RoundedCornerShape(10.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.onBackground,
@@ -179,12 +244,15 @@ fun Main(
                 Text(
                     stringResource(R.string.titlePlaceholder),
                     color = MaterialTheme.colorScheme.surface,
-                 fontSize = 23.sp
+                    fontSize = 23.sp
 
                 )
             },
             leadingIcon = {
-                Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.surface)
+                Icon(
+                    painter = painterResource(R.drawable.outline_search_24),
+                    null, tint = MaterialTheme.colorScheme.surface
+                )
             },
             textStyle = TextStyle(
                 color = MaterialTheme.colorScheme.background,
@@ -198,20 +266,22 @@ fun Main(
                 onDone = { focus.clearFocus(force = true) }
             ),
 
-        )
+            )
         LazyColumn(
             state = state,
             verticalArrangement = if (businessList.value.isEmpty()) Arrangement.Center else Arrangement.Top,
             horizontalAlignment = if (businessList.value.isEmpty()) Alignment.CenterHorizontally else Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
 
                 .navigationBarsPadding()
                 .fillMaxSize()
         ) {
             if (businessList.value.isEmpty()) {
                 items(1) {
-                    Text(stringResource(R.string.EmptyNote), color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        stringResource(R.string.EmptyNote),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             } else {
                 items(filteredList) { card ->
@@ -219,78 +289,12 @@ fun Main(
                     BusinessCard(
                         card.title,
                         card.description,
-                        onClick = { onNoteSelected(card.id) }, // ➜ адаптивное поведение
-                        onEditClick = { navigation.navigate("${ScreenRoute.Edit.route}/${card.id}") },
-                        onDeleteClick = { deleteCard.value = card.id },
+                        onNavigateWatch = { onNavigateWatch(card.id) }, // ➜ адаптивное поведение
+                        onEditClick = { onEditClick(card.id) },
+                        onDeleteClick = { deleteCard.value = card.id }, // <-- передано
                         fontSizeText,
-                        displayText
+                        displayText,
                     )
-                }
-            }
-        }
-
-        deleteCard.value?.let { cardIdToDelete ->
-            Dialog(
-                onDismissRequest = { deleteCard.value = null },
-                properties = DialogProperties(usePlatformDefaultWidth = false)
-            ) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth(widthFill)
-                        .padding(16.dp),
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onBackground)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        verticalArrangement = Arrangement.spacedBy(24.dp)
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                stringResource(R.string.dialogQuestion_1),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.background
-                            )
-                            Text(
-                                stringResource(R.string.dialogText),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.background
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            TextButton(
-                                onClick = { deleteCard.value = null },
-                                modifier = Modifier
-                                    .alpha(0.4f)
-                                    .padding(end = 16.dp),
-                                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
-                            ) {
-                                Text(
-                                    stringResource(R.string.dialogNo),
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                            }
-
-                            Button(
-                                onClick = {
-                                    mainViewModel.deleteBusiness(cardIdToDelete)
-                                    onDeleteSelectedNote(cardIdToDelete)
-                                    deleteCard.value = null
-                                },
-                                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface),
-                                modifier = Modifier.widthIn(min = widthButton)
-                            ) {
-                                Text(
-                                    stringResource(R.string.dialogYes),
-                                    color = MaterialTheme.colorScheme.background
-                                )
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -302,17 +306,19 @@ fun Main(
 fun BusinessCard(
     title: String,
     description: String,
-    onClick: () -> Unit,
+    onNavigateWatch: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     fontSizeText: TextUnit,
-    displayText: Int
+    displayText: Int,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded = remember { mutableStateOf(false) }
+
     Box {
         Card(
-            onClick = onClick,
+            onClick = onNavigateWatch,
             modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
                 .height(90.dp)
                 .fillMaxWidth(1f),
             colors = CardDefaults.cardColors(Color(0x00FFFFFF)),
@@ -344,16 +350,16 @@ fun BusinessCard(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            title,
+                            if (title.length >= displayText) title.take(displayText).drop(3) + "..." else title,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.background,
+                            maxLines = 1
                         )
                         Spacer(modifier = Modifier.padding(top = 8.dp))
                         Text(
                             text = if (description.length >= displayText) description.take(
                                 displayText
-                            )
-                                .drop(3) + "..." else description.drop(3),
+                            ).drop(3) + "..." else description.drop(3),
                             maxLines = 2,
                             fontSize = fontSizeText,
                             color = MaterialTheme.colorScheme.surface
@@ -370,22 +376,23 @@ fun BusinessCard(
             Box {
                 IconButton(
                     onClick = {
-                        expanded = true
+                        expanded.value = true
                     },
                 ) {
                     Icon(
-                        Icons.Default.MoreVert, null,
+                        painter = painterResource(R.drawable.outline_more_vert_24),
+                        null,
                         tint = MaterialTheme.colorScheme.background
                     )
                 }
                 DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false },
                     containerColor = MaterialTheme.colorScheme.onBackground
                 ) {
                     DropdownMenuItem(
                         onClick = {
-                            expanded = false
+                            expanded.value = false
                             onEditClick()
                         },
                         text = {
@@ -396,7 +403,8 @@ fun BusinessCard(
                         },
                         leadingIcon = {
                             Icon(
-                                Icons.Default.Edit,
+                                painter = painterResource(R.drawable.baseline_edit_24),
+
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.background
                             )
@@ -405,17 +413,19 @@ fun BusinessCard(
                     )
                     DropdownMenuItem(
                         onClick = {
-                            expanded = false
                             onDeleteClick()
+                            expanded.value = false
+
                         },
                         text = {
                             Text(
                                 stringResource(R.string.businessCardDelete),
-                                color = MaterialTheme.colorScheme.background)
-                               },
+                                color = MaterialTheme.colorScheme.background
+                            )
+                        },
                         leadingIcon = {
                             Icon(
-                                Icons.Default.Delete,
+                                painter = painterResource(R.drawable.outline_delete_24),
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.background
                             )

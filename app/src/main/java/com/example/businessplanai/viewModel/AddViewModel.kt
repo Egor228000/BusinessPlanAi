@@ -1,7 +1,6 @@
 package com.example.businessplanai.viewModel
 
 import android.content.res.Resources
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.data.BusinessDao
@@ -90,7 +89,7 @@ class AddViewModel @Inject constructor(
                                 )
                             ),
                             temperature = 0.1,
-                            max_tokens = 5000
+                            max_tokens = 500
 
                         )
                     )
