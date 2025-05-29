@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
+            // Навигация
             val backStack = rememberNavBackStack(MainScreenNav)
 
             val settingViewModel: SettingViewModel = hiltViewModel()
@@ -74,22 +75,24 @@ class MainActivity : ComponentActivity() {
             val editViewModel: EditViewModel = hiltViewModel()
             val watchViewModel: WatchViewModel = hiltViewModel()
 
+            // Управление темой
             val theme = settingViewModel.appTheme.collectAsState()
             val scope = rememberCoroutineScope()
 
+            // Скрывать кнопку при прокрутки
             val listState = rememberLazyListState()
-
             LaunchedEffect(Unit) {
                 mainViewModel.globalScrollState["main"] = listState
             }
             var lastScrollOffset by remember { mutableIntStateOf(1) }
-
             LaunchedEffect(listState) {
                 snapshotFlow { listState.firstVisibleItemScrollOffset }.collect { offset ->
                     mainViewModel.onScroll(offset - lastScrollOffset.toFloat())
                     lastScrollOffset = offset
                 }
             }
+
+            // Показывать кнопку при определенном размере экрана
             val activity = LocalContext.current
             val windowSizeClass = calculateWindowSizeClass(activity as Activity)
             var state = when (windowSizeClass.widthSizeClass) {
@@ -97,6 +100,7 @@ class MainActivity : ComponentActivity() {
                 WindowWidthSizeClass.Medium -> true
                 else -> true
             }
+
             theme.value?.let { actualTheme ->
                 BusinessPlanAITheme(
                     appTheme = actualTheme
@@ -108,15 +112,13 @@ class MainActivity : ComponentActivity() {
                         floatingActionButton = {
                             val fabVisible by mainViewModel.fabVisible.collectAsState()
                             when (backStack.lastOrNull()) {
-
                                 is MainScreenNav -> {
-
-                                        FloatingActionButtonCustom(
-                                            onNavigateAdd = { backStack.add(AddScreenNav) },
-                                            fabVisible = fabVisible
-                                        )
-
+                                    FloatingActionButtonCustom(
+                                        onNavigateAdd = { backStack.add(AddScreenNav) },
+                                        fabVisible = fabVisible
+                                    )
                                 }
+
                                 is WatchScreenNav -> {
                                     if (state) {
                                         FloatingActionButtonCustom(
@@ -125,8 +127,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 }
-                                else -> {}
 
+                                else -> {}
                             }
                         },
                         containerColor = MaterialTheme.colorScheme.onPrimary,
