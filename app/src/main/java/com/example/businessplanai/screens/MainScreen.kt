@@ -1,6 +1,8 @@
 package com.example.businessplanai.screens
 
 import android.app.Activity
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,6 +60,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,6 +88,8 @@ fun Main(
     val activity = LocalContext.current
     val windowSizeClass = calculateWindowSizeClass(activity as Activity)
 
+    val selectedCard =  remember { mutableStateOf<Int?>(null) }
+
     // Состояния для LazyColumn
     var state = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> listState
@@ -98,10 +103,10 @@ fun Main(
         WindowWidthSizeClass.Medium -> 15.sp
         else -> 16.sp
     }
-    var sizeHeight = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 120.dp
-        WindowWidthSizeClass.Medium -> 85.dp
-        else -> 115.dp
+    var sizeHeightCard = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> 0.dp
+        WindowWidthSizeClass.Medium -> 16.dp
+        else -> 16.dp
     }
 
     var displayText = when (windowSizeClass.widthSizeClass) {
@@ -294,6 +299,9 @@ fun Main(
                         onDeleteClick = { deleteCard.value = card.id }, // <-- передано
                         fontSizeText,
                         displayText,
+                        isSelected = selectedCard.value == card.id,
+                        onSelect = { selectedCard.value = card.id },
+                        sizeHeightCard
                     )
                 }
             }
@@ -311,21 +319,39 @@ fun BusinessCard(
     onDeleteClick: () -> Unit,
     fontSizeText: TextUnit,
     displayText: Int,
+    isSelected: Boolean,
+    onSelect: () -> Unit,
+    sizeHeightCard: Dp
 ) {
     var expanded = remember { mutableStateOf(false) }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+        else Color(0x00FFFFFF),
+        animationSpec = tween(durationMillis = 400),
+        label = "cardBackgroundColor"
+    )
+    Box(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
 
-    Box {
+    ) {
         Card(
-            onClick = onNavigateWatch,
+            onClick ={
+                onSelect()      // Выделяем карточку
+                onNavigateWatch() // И навигация
+            },
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
+
                 .height(90.dp)
+
                 .fillMaxWidth(1f),
-            colors = CardDefaults.cardColors(Color(0x00FFFFFF)),
+            colors = CardDefaults.cardColors(backgroundColor)
 
             ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(start = sizeHeightCard)
 
                 ) {
                 Column(
@@ -334,8 +360,8 @@ fun BusinessCard(
                     modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.onBackground)
-                        .padding(8.dp)
                         .size(50.dp, 50.dp)
+
 
                 ) {
                     Icon(
@@ -360,7 +386,7 @@ fun BusinessCard(
                             text = if (description.length >= displayText) description.take(
                                 displayText
                             ).drop(3) + "..." else description.drop(3),
-                            maxLines = 2,
+                            maxLines = 1,
                             fontSize = fontSizeText,
                             color = MaterialTheme.colorScheme.surface
                         )
@@ -371,7 +397,8 @@ fun BusinessCard(
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.End,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             Box {
                 IconButton(
