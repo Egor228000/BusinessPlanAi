@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,14 +61,16 @@ fun Watch(
     scope: CoroutineScope
 
 ) {
+
+    LaunchedEffect(id) {
+        watchViewModel.clearBusinessByResult()
+        watchViewModel.loadBusinessById(id)
+    }
     val context = LocalContext.current.applicationContext as Application
     var expanded = remember { mutableStateOf(false) }
 
-    LaunchedEffect(id) {
-        watchViewModel.loadBusinessById(id)
-        println(id)
-    }
     val business = watchViewModel.business.collectAsState()
+
     Column(
         modifier = Modifier
             .navigationBarsPadding()
@@ -174,112 +177,120 @@ fun Watch(
                 .padding(start = 16.dp, end = 16.dp)
 
         ) {
-            items(1) {
-                Spacer(modifier = Modifier.padding(top = 16.dp))
-                Text(
-                    text = business!!.value?.title ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.background
-                )
-            }
-            items(1) {
-                Markdown(
-                    content = business!!.value?.description ?: "",
-                    colors = DefaultMarkdownColors(
-                        text = MaterialTheme.colorScheme.background,
-                        codeText = Color(0xFFd32f2f),
-                        inlineCodeText = Color(0xFF388E3C),
-                        linkText = Color(0xFF2D71B3),
-                        codeBackground = Color(0xFFF5F5F5),
-                        inlineCodeBackground = Color(0xFF422929),
-                        dividerColor = MaterialTheme.colorScheme.surface,
-                        tableText = MaterialTheme.colorScheme.background,
-                        tableBackground = MaterialTheme.colorScheme.onBackground
-                    ),
-                    typography = DefaultMarkdownTypography(
-                        h1 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp,
-                            color = MaterialTheme.colorScheme.background
+            if (business.value == null) {
+                items(1) {
+                    CircularProgressIndicator()
+                }
+            } else {
+
+
+                items(1) {
+                    Spacer(modifier = Modifier.padding(top = 16.dp))
+                    Text(
+                        text = business!!.value?.title ?: "",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.background
+                    )
+                }
+                items(1) {
+                    Markdown(
+                        content = business!!.value?.description ?: "",
+                        colors = DefaultMarkdownColors(
+                            text = MaterialTheme.colorScheme.background,
+                            codeText = Color(0xFFd32f2f),
+                            inlineCodeText = Color(0xFF388E3C),
+                            linkText = Color(0xFF2D71B3),
+                            codeBackground = Color(0xFFF5F5F5),
+                            inlineCodeBackground = Color(0xFF422929),
+                            dividerColor = MaterialTheme.colorScheme.surface,
+                            tableText = MaterialTheme.colorScheme.background,
+                            tableBackground = MaterialTheme.colorScheme.onBackground
                         ),
-                        h2 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 26.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        h3 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        h4 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        h5 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        h6 = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        text = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        code = TextStyle(
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        inlineCode = TextStyle(
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        quote = TextStyle(
-                            fontSize = 16.sp,
-                            fontStyle = FontStyle.Italic,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        paragraph = TextStyle(
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        ordered = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        bullet = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        list = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background
-                        ),
-                        link = TextStyle(
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.background,
-                            textDecoration = TextDecoration.Underline
-                        ),
-                        textLink = TextLinkStyles(
-                            style = SpanStyle(
+                        typography = DefaultMarkdownTypography(
+                            h1 = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 30.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            h2 = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 26.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            h3 = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            h4 = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            h5 = TextStyle(
+                                fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 color = MaterialTheme.colorScheme.background
                             ),
-                            focusedStyle = SpanStyle(),
-                            hoveredStyle = SpanStyle(),
-                            pressedStyle = SpanStyle(),
-                        ),
-                        table = TextStyle(
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.background
+                            h6 = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            text = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            code = TextStyle(
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            inlineCode = TextStyle(
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            quote = TextStyle(
+                                fontSize = 16.sp,
+                                fontStyle = FontStyle.Italic,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            paragraph = TextStyle(
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            ordered = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            bullet = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            list = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.background
+                            ),
+                            link = TextStyle(
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.background,
+                                textDecoration = TextDecoration.Underline
+                            ),
+                            textLink = TextLinkStyles(
+                                style = SpanStyle(
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.background
+                                ),
+                                focusedStyle = SpanStyle(),
+                                hoveredStyle = SpanStyle(),
+                                pressedStyle = SpanStyle(),
+                            ),
+                            table = TextStyle(
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.background
+                            )
                         )
                     )
-                )
+                }
             }
         }
     }

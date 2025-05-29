@@ -54,6 +54,10 @@ class WatchViewModel @Inject constructor(private val dao: BusinessDao) : ViewMod
         }
     }
 
+    fun clearBusinessByResult() {
+        _business.value = null
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun saveTextToDownloads(context: Context, fileName: String, mimeType: String, content: String) {
