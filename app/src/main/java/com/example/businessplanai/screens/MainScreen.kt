@@ -80,12 +80,11 @@ fun Main(
     onDeleteClick: (Int) -> Unit,
     onNavigateSetting: () -> Unit
 ) {
-
+    val activity = LocalContext.current
 
     val businessList = mainViewModel.businessList.collectAsState()//
     var deleteCard = remember { mutableStateOf<Int?>(null) }
     val listStateTwo = rememberLazyListState()
-    val activity = LocalContext.current
     val windowSizeClass = calculateWindowSizeClass(activity as Activity)
 
     val selectedCard =  remember { mutableStateOf<Int?>(null) }
@@ -464,3 +463,4 @@ fun BusinessCard(
         }
     }
 }
+

@@ -61,21 +61,21 @@ fun Watch(
     scope: CoroutineScope
 
 ) {
+    val context = LocalContext.current.applicationContext as Application
 
 
     LaunchedEffect(id) {
         watchViewModel.clearBusinessByResult()
         watchViewModel.loadBusinessById(id)
     }
-    val context = LocalContext.current.applicationContext as Application
     var expanded = remember { mutableStateOf(false) }
-
     val business = watchViewModel.business.collectAsState()
+
 
     Column(
         modifier = Modifier
             .navigationBarsPadding()
-            .background(MaterialTheme.colorScheme.onPrimary,)
+            .background(MaterialTheme.colorScheme.onPrimary)
 
     ) {
         TopAppBar(
@@ -105,6 +105,7 @@ fun Watch(
             actions = {
                 IconButton(
                     onClick = {
+
                         expanded.value = true
                     }) {
                     Icon(
@@ -120,16 +121,14 @@ fun Watch(
                 ) {
                     DropdownMenuItem(
                         onClick = {
-                            scope.launch(Dispatchers.IO) {
-                                expanded.value = false
 
-                                watchViewModel.saveTextToDownloads(
-                                    context,
-                                    "Бизнес_план.pdf",
-                                    "application/pdf",
-                                    watchViewModel.getCurrentBusinessText()
-                                )
-                            }
+                            expanded.value = false
+                            watchViewModel.saveTextToDownloads(
+                                context,
+                                "Бизнес_план.pdf",
+                                "application/pdf",
+                                watchViewModel.getCurrentBusinessText()
+                            )
                         }, text = {
                             Text(
                                 "PDF",
@@ -137,7 +136,7 @@ fun Watch(
                             )
                         }, leadingIcon = {
                             Icon(
-                                painter = painterResource(R.drawable.baseline_edit_24),
+                                painter = painterResource(R.drawable.baseline_picture_as_pdf_24),
 
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.background
@@ -148,8 +147,8 @@ fun Watch(
                     )
                     DropdownMenuItem(
                         onClick = {
-                            scope.launch(Dispatchers.IO) {
 
+                            scope.launch(Dispatchers.IO) {
                                 expanded.value = false
                                 watchViewModel.saveTextToDownloads(
                                     context = context,
@@ -160,7 +159,7 @@ fun Watch(
                             }
                         }, text = { Text("Word") }, leadingIcon = {
                             Icon(
-                                painter = painterResource(R.drawable.outline_delete_24),
+                                painter = painterResource(R.drawable.outline_document_scanner_24),
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.background
                             )
@@ -183,8 +182,6 @@ fun Watch(
                     CircularProgressIndicator()
                 }
             } else {
-
-
                 items(1) {
                     Spacer(modifier = Modifier.padding(top = 16.dp))
                     Text(
