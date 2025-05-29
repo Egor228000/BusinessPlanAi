@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.Packaging
 import org.gradle.kotlin.dsl.implementation
 
 plugins {
@@ -12,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.example.businessplanai"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.businessplanai"
@@ -65,6 +64,16 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.adaptive.navigation3)
+    implementation (libs.androidx.adaptive)
+    implementation (libs.androidx.adaptive.layout)
+    implementation(libs.androidx.material3.windowsizeclass)
+
+
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
