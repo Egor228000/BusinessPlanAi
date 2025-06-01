@@ -99,7 +99,7 @@ Responsive дизайн достигается благодаря использ
 
 | Phone                      | Tablet                              | 
 | ---------------------------- | ----------------------------------- |
-|<img src="ScreenVideo/PhoneVideo.gif" width="250" alt="Превью 2" />|<img src="ScreenVideo/VideoTablet.gif" width="700" alt="Превью 1" />|
+|<img src="ScreenVideo/PhoneVideo.gif" width="250" alt="Превью 2" />|<img src="ScreenVideo/TabletAdaptiveVideo.gif" width="700" alt="Превью 1" />|
 
 
 
