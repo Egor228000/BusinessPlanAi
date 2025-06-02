@@ -64,7 +64,7 @@ android {
 }
 
 dependencies {
-
+    implementation ("com.google.mediapipe:tasks-genai:0.10.24")
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
