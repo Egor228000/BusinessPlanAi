@@ -22,10 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BusinessPlanAI"
         tools:targetApi="33">
-        <service
-            android:name="androidx.work.impl.background.systemjob.SystemJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup" />
+        </provider>
         <activity
 
             android:name=".MainActivity"
