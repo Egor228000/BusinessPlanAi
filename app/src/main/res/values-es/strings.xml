@@ -24,7 +24,7 @@
     <string name="businessCardEdit">Editar</string>
     <string name="businessCardDelete">Eliminar</string>
     <string name="businessCardSelectedNote">Seleccione una nota</string>
-    <string name="settingDescription_1">La dirección de su servidor en LM-Studio</string>
+    <string name="settingDescription_1">Cargando el modelo</string>
     <string name="settingDescription_2">Especifique la dirección del servidor y no olvide especificar el puerto (últimos 4 dígitos)</string>
     <string name="settingThemeTitle">Temas de Aplicación</string>
     <string name="settingTheme_1">Sistema</string>
@@ -56,4 +56,12 @@
     - Plan financiero (inversiones, gastos, rentabilidad)
     - Indicadores clave (KPIs)
     </string>
+    <string name="settingNotFile">El archivo no está seleccionado</string>
+    <string name="settingSelectedFile">Por favor, seleccione el archivo con el .extensión de tarea.</string>
+    <string name="settingLoadingModel">Cargando el modelo:</string>
+    <string name="settingYesModel">¡El modelo se ha subido correctamente!</string>
+    <string name="settingNoOpenFile">No se pudo abrir el archivo</string>
+    <string name="settingError">Error</string>
+    <string name="settingSelectedModel">Importar un modelo</string>
+    <string name="settingSelectedTask">con el .extensión de tarea</string>
 </resources>

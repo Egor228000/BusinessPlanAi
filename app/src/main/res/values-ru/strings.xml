@@ -24,7 +24,7 @@
     <string name="businessCardEdit">Редактировать</string>
     <string name="businessCardDelete">Удалить</string>
     <string name="businessCardSelectedNote">Выберите заметку</string>
-    <string name="settingDescription_1">Адрес вашего сервера в LM-Studio</string>
+    <string name="settingDescription_1">Загрузка модели</string>
     <string name="settingDescription_2">Укажите адресс сервера и не забдьте указать порт(последние 4 цифры)</string>
     <string name="settingThemeTitle">Темы приложения</string>
     <string name="settingTheme_1">Системная</string>
@@ -33,6 +33,16 @@
     <string name="settingTheme_4">Светло красная</string>
     <string name="settingTheme_5">Тёмно красная</string>
     <string name="settingTheme_6">Светло зелёная</string>
+
+    <string name="settingNotFile">Файл не выбран</string>
+    <string name="settingSelectedFile">Пожалуйста, выберите файл с расширением .task</string>
+    <string name="settingLoadingModel">Загрузка модели: </string>
+    <string name="settingYesModel">Модель успешно загружена!</string>
+    <string name="settingNoOpenFile">Не удалось открыть файл</string>
+    <string name="settingError">Ошибка</string>
+    <string name="settingSelectedModel">Импортировать модель</string>
+    <string name="settingSelectedTask">расширением .task</string>
+
 
     <string name="business_plan_template">
         Сгенерируй подробный бизнес-план, последовательно раскрывая 5 ключевых вопросов. На основе ответов составь структурированный документ с анализом, стратегиями и расчетами.

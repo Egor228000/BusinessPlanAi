@@ -24,7 +24,7 @@
     <string name="businessCardEdit">编辑</string>
     <string name="businessCardDelete">移走</string>
     <string name="businessCardSelectedNote">选择注释</string>
-    <string name="settingDescription_1">您的服务器在LM-Studio中的地址</string>
+    <string name="settingDescription_1">加载模型</string>
     <string name="settingDescription_2">指定服务器地址，不要忘记指定端口（最后4位数字）</string>
     <string name="settingThemeTitle">应用主题</string>
     <string name="settingTheme_1">系统</string>
@@ -56,5 +56,13 @@
         - 财务计划（投资、支出、回本周期）
         - 关键绩效指标（KPI）
     </string>
+    <string name="settingNotFile">未选择该文件</string>
+    <string name="settingSelectedFile">请选择带有.任务扩展。</string>
+    <string name="settingLoadingModel">加载模型:</string>
+    <string name="settingYesModel">模型已上传成功！</string>
+    <string name="settingNoOpenFile">无法打开文件</string>
+    <string name="settingError">错误</string>
+    <string name="settingSelectedModel">导入模型</string>
+    <string name="settingSelectedTask">用的。任务扩展</string>
 
 </resources>

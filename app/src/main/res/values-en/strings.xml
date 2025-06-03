@@ -24,7 +24,7 @@
     <string name="businessCardEdit">Edit</string>
     <string name="businessCardDelete">Remove</string>
     <string name="businessCardSelectedNote">Select a note</string>
-    <string name="settingDescription_1">The address of your server in LM-Studio</string>
+    <string name="settingDescription_1">Loading the mode</string>
     <string name="settingDescription_2">Specify the server address and do not forget to specify the port (last 4 digits)</string>
     <string name="settingThemeTitle">Application Themes</string>
     <string name="settingTheme_1">"System "</string>
@@ -56,4 +56,12 @@
     - Financial plan (investments, expenses, payback)
     - KPIs (key performance indicators)
     </string>
+    <string name="settingNotFile">The file is not selected</string>
+    <string name="settingSelectedFile">Please select the file with the .task extension.</string>
+    <string name="settingLoadingModel">Loading the model:</string>
+    <string name="settingYesModel">The model has been uploaded successfully!</string>
+    <string name="settingNoOpenFile">Couldn\'t open the file</string>
+    <string name="settingError">Mistake</string>
+    <string name="settingSelectedModel">Import a model</string>
+    <string name="settingSelectedTask">with the .task extension</string>
 </resources>
