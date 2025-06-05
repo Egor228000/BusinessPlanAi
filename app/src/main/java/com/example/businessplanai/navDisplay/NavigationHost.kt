@@ -126,7 +126,8 @@ fun NavigationHost(
                             onDeleteClick = { id ->
                                 mainViewModel.deleteBusiness(id = id)
                             },
-                            onNavigateSetting = { backStack.add(SettingScreenNav) }
+                            onNavigateSetting = { backStack.add(SettingScreenNav) },
+
                         )
 
                     }

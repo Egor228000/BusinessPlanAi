@@ -1,5 +1,6 @@
 package com.example.businessplanai.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -56,8 +57,10 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.businessplanai.R
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -66,6 +69,7 @@ fun AddPlan(
     settingViewModel: SettingViewModel,
     onBack: () -> Unit
 ) {
+    val llmInference by settingViewModel.llmInference.collectAsState()
     // Для TExtFields
     var nameBusiness by remember { mutableStateOf("") }
     var pointBusiness by remember { mutableStateOf("") }
@@ -84,8 +88,14 @@ fun AddPlan(
     val isConnected by addViewModel.isConnected.collectAsState()
     val ipAdress by settingViewModel.serverIp.collectAsState()
 
+    val modelPath by settingViewModel.modelPath.collectAsState()
 
-    val resources = stringResource(R.string.business_plan_template)
+    LaunchedEffect(modelPath) {
+        if (modelPath?.isNotBlank() == true) {
+            addViewModel.initLlm(context, modelPath.toString())
+        }
+    }
+
     LaunchedEffect(isConnected) {
         if (!isConnected) {
             delay(2000)
@@ -196,30 +206,32 @@ fun AddPlan(
                 }
 
             }
+
             Spacer(modifier = Modifier)
             Column(
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier.fillMaxHeight(1f)
             ) {
                 if (!isLoading.value) {
+
                     val context = LocalContext.current
                     val resources = context.resources
+                    val prompt = resources.getString(
+                        R.string.business_plan_template,
+                        nameBusiness,
+                        pointBusiness,
+                        auditoriumBusiness,
+                        advantagesBusiness,
+                        monetizationBusiness,
+                        barriersAndSolutionsBusiness
+                    ).trimIndent()
                     Button(
                         elevation = ButtonDefaults.buttonElevation(1.dp),
                         onClick = {
-
                             scope.launch {
-                                addViewModel.getFullChatResponse(
-                                    nameBusiness,
-                                    pointBusiness,
-                                    auditoriumBusiness,
-                                    advantagesBusiness,
-                                    monetizationBusiness,
-                                    barriersAndSolutionsBusiness,
-                                    ipAdress,
-                                    resources
-                                )
+                                addViewModel.generateAndSaveToDb(prompt, nameBusiness)
                             }
+
                         },
                         colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colorScheme.onSurface),
                         modifier = Modifier

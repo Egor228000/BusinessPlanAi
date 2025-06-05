@@ -1,6 +1,7 @@
 package com.example.businessplanai.screens
 
 import android.app.Activity
+import android.content.Context
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -44,10 +45,12 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,8 +69,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.businessplanai.R
 import com.example.businessplanai.viewModel.MainViewModel
+import com.google.mediapipe.tasks.genai.llminference.LlmInference
+import com.google.mediapipe.tasks.genai.llminference.LlmInference.LlmInferenceOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.bouncycastle.crypto.params.Blake3Parameters.context
+import java.io.File
+import java.io.FileOutputStream
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
@@ -80,6 +91,9 @@ fun Main(
     onDeleteClick: (Int) -> Unit,
     onNavigateSetting: () -> Unit
 ) {
+
+
+
     val activity = LocalContext.current
 
     val businessList = mainViewModel.businessList.collectAsState()//
@@ -346,13 +360,13 @@ fun BusinessCard(
                 .fillMaxWidth(1f),
             colors = CardDefaults.cardColors(backgroundColor)
 
-            ) {
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = sizeHeightCard)
 
-                ) {
+            ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,

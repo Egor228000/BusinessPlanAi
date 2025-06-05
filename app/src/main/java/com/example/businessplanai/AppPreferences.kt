@@ -1,11 +1,14 @@
 package com.example.businessplanai
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.businessplanai.AppPreferences.PreferencesKeys.MODEL_PATH_KEY
 import com.example.businessplanai.ui.theme.AppTheme
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,8 +21,20 @@ class AppPreferences @Inject constructor(
     private object PreferencesKeys {
         val APP_THEME = stringPreferencesKey("app_theme")
         val SERVER_IP = stringPreferencesKey("server_ip")
+        val MODEL_PATH_KEY = stringPreferencesKey("model_path")
+    }
+    suspend fun saveModelPath(path: String) {
+        context.dataStore.edit { prefs ->
+            prefs[MODEL_PATH_KEY] = path
+        }
     }
 
+    fun loadModelPath(): Flow<String?> {
+        return context.dataStore.data
+            .map { prefs: Preferences ->
+                prefs[MODEL_PATH_KEY]
+            }
+    }
     suspend fun saveAppTheme(theme: AppTheme) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.APP_THEME] = theme.name
@@ -38,11 +53,7 @@ class AppPreferences @Inject constructor(
             .first()
     }
 
-    suspend fun saveServerIp(ip: String) {
-        context.dataStore.edit { preferences ->
-            preferences[PreferencesKeys.SERVER_IP] = ip
-        }
-    }
+
 
     suspend fun getServerIp(): String {
         return context.dataStore.data
@@ -51,4 +62,5 @@ class AppPreferences @Inject constructor(
             }
             .first()
     }
+
 }

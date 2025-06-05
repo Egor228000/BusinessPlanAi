@@ -1,6 +1,8 @@
 package com.example.businessplanai
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -38,12 +40,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.example.businessplanai.navDisplay.AddScreenNav
 import com.example.businessplanai.navDisplay.MainScreenNav
 import com.example.businessplanai.navDisplay.NavigationHost
+import com.example.businessplanai.navDisplay.SettingScreenNav
 import com.example.businessplanai.navDisplay.WatchScreenNav
 import com.example.businessplanai.ui.theme.BusinessPlanAITheme
 import com.example.businessplanai.viewModel.AddViewModel
@@ -62,10 +67,13 @@ class MainActivity : ComponentActivity() {
         ExperimentalMaterial3WindowSizeClassApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
+
         enableEdgeToEdge()
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
+            val activity = LocalContext.current
+
             // Навигация
             val backStack = rememberNavBackStack(MainScreenNav)
 
@@ -93,7 +101,6 @@ class MainActivity : ComponentActivity() {
             }
 
             // Показывать кнопку при определенном размере экрана
-            val activity = LocalContext.current
             val windowSizeClass = calculateWindowSizeClass(activity as Activity)
             var state = when (windowSizeClass.widthSizeClass) {
                 WindowWidthSizeClass.Compact -> false
@@ -176,3 +183,18 @@ fun FloatingActionButtonCustom(
 }
 
 
+fun requestNotificationPermission(activity: Activity?) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                1001
+            )
+        }
+    }
+}

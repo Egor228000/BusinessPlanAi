@@ -1,6 +1,8 @@
 package com.example.businessplanai.viewModel
 
+import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.data.BusinessDao
@@ -28,12 +30,53 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import javax.inject.Inject
 import com.example.businessplanai.R
+import com.google.mediapipe.tasks.genai.llminference.LlmInference
+import com.google.mediapipe.tasks.genai.llminference.LlmInference.LlmInferenceOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
     private val dao: BusinessDao, private val client: HttpClient,
     networkStatusTracker: NetworkStatusTracker,
 ) : ViewModel() {
+
+
+
+
+
+    private var llmInference: LlmInference? = null
+
+    private val _response = MutableStateFlow("")
+    val response: StateFlow<String> = _response
+
+
+
+    fun initLlm(context: Context) {
+        viewModelScope.launch {
+            val taskOptions = LlmInferenceOptions.builder()
+                .setModelPath("/data/local/tmp/llm/qween0_5.task") // путь к модели
+                .setMaxTopK(64)
+                .build()
+
+            llmInference = LlmInference.createFromOptions(context, taskOptions)
+        }
+
+    }
+
+    fun generate(prompt: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = llmInference?.generateResponse(prompt)
+                Log.d("LLM", "result: $result")
+                _response.value = result ?: "No response"
+            } catch (e: Exception) {
+                _response.value = "Error: ${e.message}"
+            }
+        }
+    }
+
+
 
     val isConnected = networkStatusTracker.observeNetworkStatus()
         .distinctUntilChanged()
@@ -50,71 +93,48 @@ class AddViewModel @Inject constructor(
     private val _isLoadingNavigate = MutableStateFlow(false)
     val isLoadingNavigate: StateFlow<Boolean> = _isLoadingNavigate
 
+    fun initLlm(context: Context, modelPath: String) {
+        viewModelScope.launch {
+            try {
+                Log.d("LLM_INIT", "Using model path: $modelPath")
 
-    suspend fun getFullChatResponse(
-        nameBusiness: String,
-        pointBusiness: String,
-        auditoriumBusiness: String,
-        advantagesBusiness: String,
-        monetizationBusiness: String,
-        barriersAndSolutionsBusiness: String,
-        ipAdress:  String,
-        resources: Resources  // ← Добавляем сюда ресурсы
-    ): String {
-        val prompt = resources.getString(
-            R.string.business_plan_template,
-            nameBusiness,
-            pointBusiness,
-            auditoriumBusiness,
-            advantagesBusiness,
-            monetizationBusiness,
-            barriersAndSolutionsBusiness
-        ).trimIndent()
+                val taskOptions = LlmInferenceOptions.builder()
+                    .setModelPath(modelPath)
+                    .setMaxTopK(64)
+                    .build()
 
-        _isLoading.value = true
-        return try {
+                llmInference = LlmInference.createFromOptions(context, taskOptions)
 
-            val response: HttpResponse =
-                client.request("http://$ipAdress/v1/chat/completions") {
+                Log.d("LLM_INIT", "LLM successfully initialized")
 
-                    method = HttpMethod.Post
-                    contentType(ContentType.Application.Json)
-                    setBody(
-                        ChatRequest(
-                            model = "",
-                            messages = listOf(
-                                ChatMessage(
-                                    role = "user",
-                                    content = prompt
-                                )
-                            ),
-                            temperature = 0.1,
-                            max_tokens = 5000
+            } catch (e: Exception) {
+                Log.e("LLM_INIT", "Failed to initialize LLM", e)
+            }
+        }
+    }
 
-                        )
+    fun generateAndSaveToDb(
+        prompt: String,
+        title: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
+            try {
+                val result = llmInference?.generateResponse(prompt) ?: "No response"
+                _response.value = result
+
+                dao.insert(
+                    BusinessEnity(
+                        title = title,
+                        description = result
                     )
-                }
-
-            val responseBody = response.bodyAsText()
-            val content = Json.parseToJsonElement(responseBody)
-                .jsonObject["choices"]?.jsonArray?.firstOrNull()
-                ?.jsonObject?.get("message")?.jsonObject?.get("content")?.jsonPrimitive?.content
-                ?: "Бот не дал ответа"
-            _isLoading.value = false
-            _isLoadingNavigate.value = true
-
-            // ✅ Сохраняем результат в БД
-            val entity = BusinessEnity(
-                title = nameBusiness,
-                description = content
-            )
-            dao.insert(entity)
-            _isLoadingNavigate.value = false
-            content
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            "Произошла ошибка: ${e.localizedMessage ?: "Неизвестная ошибка"}"
+                )
+                _isLoadingNavigate.value = true
+            } catch (e: Exception) {
+                _response.value = "Error: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }

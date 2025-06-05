@@ -19,7 +19,7 @@ object NetworkKtorModule {
     @Provides
     @Singleton
     fun provideNetworkKtorModule(): HttpClient {
-        return   HttpClient(CIO) {
+        return HttpClient(CIO) {
             install(HttpTimeout) {
                 requestTimeoutMillis = 600_000
                 connectTimeoutMillis = 60_000
