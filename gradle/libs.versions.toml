@@ -12,23 +12,21 @@ coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.9.0"
+lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.05.01"
+composeBom = "2025.06.00"
 ktorClientContentNegotiation = "3.1.3"
 kotlinxSerializationJson = "1.8.1"
-material3WindowSizeClass = "1.3.2"
 multiplatformMarkdownRenderer = "0.34.0-rc03"
-navigationCompose = "2.9.0"
 poiOoxml = "5.2.3"
 roomRuntime = "2.7.1"
 
 lifecycleViewmodelNavigation3 = "1.0.0-alpha01"
 material3 = "1.4.0-alpha15"
-navigation3Runtime = "1.0.0-alpha02"
+navigation3Runtime = "1.0.0-alpha03"
 adaptive = "1.2.0-alpha06"
 adaptiveNavigation3 = "1.0.0-SNAPSHOT"
-workRuntimeKtx = "2.10.1"
+tasksGenai = "0.10.24"
 
 
 [libraries]
@@ -46,8 +44,6 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-androidx-material3-window-size-class1 = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 flexmark-all = { module = "com.vladsch.flexmark:flexmark-all", version.ref = "flexmarkAll" }
@@ -55,12 +51,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 html2pdf = { module = "com.itextpdf:html2pdf", version.ref = "html2pdf" }
 itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientContentNegotiation" }
 multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatformMarkdownRenderer" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientContentNegotiation" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktorClientContentNegotiation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -75,7 +68,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
-androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
+tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "tasksGenai" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

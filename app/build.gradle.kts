@@ -64,7 +64,10 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.mediapipe:tasks-genai:0.10.24")
+    //AI model
+    implementation (libs.tasks.genai)
+
+    // Navigation3 и Adaptive Material
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -76,19 +79,15 @@ dependencies {
 
     implementation (libs.androidx.datastore.preferences)
     implementation(libs.hilt.android)
-    implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.hilt.android.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
 
-    implementation (libs.androidx.material3.window.size.class1)
-    implementation (libs.androidx.navigation.compose)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 
     implementation (libs.androidx.core.splashscreen)
 
-    implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.multiplatform.markdown.renderer)
@@ -97,11 +96,8 @@ dependencies {
     implementation(libs.flexmark.all)
     implementation(libs.poi.ooxml)
     implementation (libs.html2pdf)
-// Для PDF
+    // Для PDF
     implementation(libs.itext7.core)
-
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.cio)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
