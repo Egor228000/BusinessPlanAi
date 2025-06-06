@@ -1,8 +1,6 @@
 package com.example.businessplanai
 
-import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,15 +38,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.example.businessplanai.navDisplay.AddScreenNav
 import com.example.businessplanai.navDisplay.MainScreenNav
 import com.example.businessplanai.navDisplay.NavigationHost
-import com.example.businessplanai.navDisplay.SettingScreenNav
 import com.example.businessplanai.navDisplay.WatchScreenNav
 import com.example.businessplanai.ui.theme.BusinessPlanAITheme
 import com.example.businessplanai.viewModel.AddViewModel
@@ -183,18 +178,3 @@ fun FloatingActionButtonCustom(
 }
 
 
-fun requestNotificationPermission(activity: Activity?) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        if (ContextCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                1001
-            )
-        }
-    }
-}
