@@ -23,18 +23,19 @@ class AppPreferences @Inject constructor(
         val SERVER_IP = stringPreferencesKey("server_ip")
         val MODEL_PATH_KEY = stringPreferencesKey("model_path")
     }
+
+    val modelPathFlow: Flow<String?> = context.dataStore.data
+        .map { prefs ->
+            prefs[MODEL_PATH_KEY]
+        }
+
     suspend fun saveModelPath(path: String) {
         context.dataStore.edit { prefs ->
             prefs[MODEL_PATH_KEY] = path
         }
     }
 
-    fun loadModelPath(): Flow<String?> {
-        return context.dataStore.data
-            .map { prefs: Preferences ->
-                prefs[MODEL_PATH_KEY]
-            }
-    }
+
     suspend fun saveAppTheme(theme: AppTheme) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.APP_THEME] = theme.name
@@ -52,7 +53,6 @@ class AppPreferences @Inject constructor(
             }
             .first()
     }
-
 
 
     suspend fun getServerIp(): String {
