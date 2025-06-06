@@ -57,10 +57,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.businessplanai.R
 import com.example.businessplanai.viewModel.AddViewModel
 import com.example.businessplanai.viewModel.SettingViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +67,6 @@ fun AddPlan(
     settingViewModel: SettingViewModel,
     onBack: () -> Unit
 ) {
-    val llmInference by settingViewModel.llmInference.collectAsState()
     // Для TExtFields
     var nameBusiness by remember { mutableStateOf("") }
     var pointBusiness by remember { mutableStateOf("") }
@@ -86,13 +83,11 @@ fun AddPlan(
     val context = LocalContext.current
     // ПРоверка подключения
     val isConnected by addViewModel.isConnected.collectAsState()
-    val ipAdress by settingViewModel.serverIp.collectAsState()
 
-    val modelPath by settingViewModel.modelPath.collectAsState()
-
-    LaunchedEffect(modelPath) {
-        if (modelPath?.isNotBlank() == true) {
-            addViewModel.initLlm(context, modelPath.toString())
+    val isModelReady by addViewModel.isModelReady.collectAsState()
+    LaunchedEffect(settingViewModel.modelPath.collectAsState().value) {
+        settingViewModel.modelPath.value?.let { modelPath ->
+            addViewModel.initLlm(context, modelPath)
         }
     }
 
@@ -237,7 +232,7 @@ fun AddPlan(
                         modifier = Modifier
                             .height(50.dp)
                             .fillMaxWidth(1f),
-                        enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected),
+                        enabled = !(nameBusiness.isEmpty() || pointBusiness.isEmpty() || auditoriumBusiness.isEmpty() || advantagesBusiness.isEmpty() || monetizationBusiness.isEmpty() || barriersAndSolutionsBusiness.isEmpty() || !isConnected || !isModelReady),
                         border = BorderStroke(
                             1.dp,
                             MaterialTheme.colorScheme.onSurface
@@ -245,13 +240,13 @@ fun AddPlan(
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Text(
-                            stringResource(R.string.buttonText),
+                            if (isModelReady)  stringResource(R.string.buttonText) else stringResource(R.string.settingLoadingModel),
                             color = MaterialTheme.colorScheme.background,
                             fontSize = 18.sp
                         )
                     }
                     if (isLoadingNavigate.value) {
-                        onBack
+                        onBack()
                     }
                 } else if (isLoading.value) {
                     Dialog(
