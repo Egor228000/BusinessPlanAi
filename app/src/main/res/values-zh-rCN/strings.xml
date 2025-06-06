@@ -58,7 +58,7 @@
     </string>
     <string name="settingNotFile">未选择该文件</string>
     <string name="settingSelectedFile">请选择带有.任务扩展。</string>
-    <string name="settingLoadingModel">加载模型:</string>
+    <string name="settingLoadingModel">加载模型</string>
     <string name="settingYesModel">模型已上传成功！</string>
     <string name="settingNoOpenFile">无法打开文件</string>
     <string name="settingError">错误</string>

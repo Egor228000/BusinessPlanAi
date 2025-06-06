@@ -71,7 +71,7 @@
     <string name="app_name">BusinessPlanAI</string>
     <string name="settingNotFile">The file is not selected</string>
     <string name="settingSelectedFile">Please select the file with the .task extension.</string>
-    <string name="settingLoadingModel">Loading the model:</string>
+    <string name="settingLoadingModel">Loading the model</string>
     <string name="settingYesModel">The model has been uploaded successfully!</string>
     <string name="settingNoOpenFile">Couldn\'t open the file</string>
     <string name="settingError">Mistake</string>

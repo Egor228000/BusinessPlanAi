@@ -58,7 +58,7 @@
     </string>
     <string name="settingNotFile">El archivo no está seleccionado</string>
     <string name="settingSelectedFile">Por favor, seleccione el archivo con el .extensión de tarea.</string>
-    <string name="settingLoadingModel">Cargando el modelo:</string>
+    <string name="settingLoadingModel">Cargando el modelo</string>
     <string name="settingYesModel">¡El modelo se ha subido correctamente!</string>
     <string name="settingNoOpenFile">No se pudo abrir el archivo</string>
     <string name="settingError">Error</string>

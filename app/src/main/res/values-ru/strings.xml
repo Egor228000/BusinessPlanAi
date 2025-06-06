@@ -36,7 +36,7 @@
 
     <string name="settingNotFile">Файл не выбран</string>
     <string name="settingSelectedFile">Пожалуйста, выберите файл с расширением .task</string>
-    <string name="settingLoadingModel">Загрузка модели: </string>
+    <string name="settingLoadingModel">Загрузка модели</string>
     <string name="settingYesModel">Модель успешно загружена!</string>
     <string name="settingNoOpenFile">Не удалось открыть файл</string>
     <string name="settingError">Ошибка</string>

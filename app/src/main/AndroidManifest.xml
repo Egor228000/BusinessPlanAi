@@ -23,7 +23,6 @@
         android:theme="@style/Theme.BusinessPlanAI"
         tools:targetApi="33">
         <activity
-
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
