@@ -33,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,9 @@ import androidx.compose.ui.unit.sp
 import com.example.businessplanai.R
 import com.example.businessplanai.ui.theme.AppTheme
 import com.example.businessplanai.viewModel.SettingViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,6 +113,7 @@ fun Settings(
                         },
                         resources
                     )
+
                     Spacer(Modifier.height(16.dp))
 
 
@@ -163,12 +168,14 @@ fun SimpleModelLoader(
 ) {
     val context = LocalContext.current
     var status by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
     // Ланчер для выбора любого файла (GetContent → "*/*")
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri == null) {
+            // Пользователь не выбрал файл
             status = resources.getString(R.string.settingNotFile)
             return@rememberLauncherForActivityResult
         }
@@ -176,23 +183,40 @@ fun SimpleModelLoader(
         // Получаем имя файла через ContentResolver
         val fileName = context.getFileName(uri) ?: ""
         if (!fileName.endsWith(".task")) {
-            status =  resources.getString(R.string.settingSelectedFile)
+            // Выбран не .task
+            status = resources.getString(R.string.settingSelectedFile)
             return@rememberLauncherForActivityResult
         }
 
-        // Копируем файл из полученного URI во внутреннее хранилище приложения (context.filesDir)
-        val destinationFile = File(context.filesDir, fileName)
-        try {
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                destinationFile.outputStream().use { output ->
-                    input.copyTo(output)
+        // Начинаем копировать: статус «Копирование…»
+
+        status =  resources.getString(R.string.settingLoadingModel)
+
+        // Копируем в фоновом потоке
+        coroutineScope.launch(Dispatchers.IO) {
+            val destinationFile = File(context.filesDir, fileName)
+            val copySuccess = try {
+                context.contentResolver.openInputStream(uri)?.use { input ->
+                    destinationFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+                true
+            } catch (e: Exception) {
+                false
+            }
+
+            withContext(Dispatchers.Main) {
+                if (copySuccess && destinationFile.exists()) {
+                    // 1) сначала отдаем путь во ViewModel, чтобы он сохранил его в DataStore
+                    onModelSelected(destinationFile.absolutePath)
+
+                    // 2) затем обновляем статус: «Модель успешно загружена»
+                    status = resources.getString(R.string.settingYesModel)
+                } else {
+                    status = resources.getString(R.string.settingNoOpenFile)
                 }
             }
-            // Отдаём полный путь во ViewModel (которая сохранит его в DataStore)
-            onModelSelected(destinationFile.absolutePath)
-            status = resources.getString(R.string.settingYesModel)
-        } catch (e: Exception) {
-            status = resources.getString(R.string.settingNoOpenFile)
         }
     }
 
@@ -207,7 +231,7 @@ fun SimpleModelLoader(
             )
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = status,

@@ -171,7 +171,7 @@ fun NavigationHost(
                             addViewModel,
                             settingViewModel,
                             onBack = {
-                                backStack.removeLastOrNull()
+                                backStack.remove(AddScreenNav)
 
                             }
                         )

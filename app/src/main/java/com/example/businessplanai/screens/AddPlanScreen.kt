@@ -119,7 +119,6 @@ fun AddPlan(
             navigationIcon =  {
                 IconButton(
                     onClick = {
-
                         onBack()
                     }) {
                     Icon(
@@ -245,7 +244,7 @@ fun AddPlan(
                             fontSize = 18.sp
                         )
                     }
-                    if (isLoadingNavigate.value) {
+                    if (isLoadingNavigate.value == false) {
                         onBack()
                     }
                 } else if (isLoading.value) {
