@@ -1,9 +1,9 @@
 package com.example.businessplanai.screens
 
 import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -33,7 +33,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,9 +44,6 @@ import androidx.compose.ui.unit.sp
 import com.example.businessplanai.R
 import com.example.businessplanai.ui.theme.AppTheme
 import com.example.businessplanai.viewModel.SettingViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +52,9 @@ fun Settings(
     settingViewModel: SettingViewModel,
     onBack: () -> Unit,
 ) {
-    val modelPath by settingViewModel.modelPath.collectAsState()
     val currentTheme by settingViewModel.appTheme.collectAsState()
-
+    val context = LocalContext.current
+    val resources = context.resources
 
     Column(
         modifier = Modifier
@@ -104,18 +100,14 @@ fun Settings(
             }
             items(1) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = if (modelPath != null) "Модель загружена" else "Модель не загружена",
-                        color = MaterialTheme.colorScheme.background
-                    )
 
                     Spacer(Modifier.height(16.dp))
 
                     SimpleModelLoader(
                         onModelSelected = { path ->
-                            // Вызываем метод для сохранения пути
                             settingViewModel.saveModelPath(path)
-                        }
+                        },
+                        resources
                     )
                     Spacer(Modifier.height(16.dp))
 
@@ -166,45 +158,51 @@ fun Settings(
 
 @Composable
 fun SimpleModelLoader(
-    onModelSelected: (String) -> Unit
+    onModelSelected: (String) -> Unit,
+    resources: Resources
 ) {
     val context = LocalContext.current
     var status by remember { mutableStateOf("") }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    // Ланчер для выбора любого файла (GetContent → "*/*")
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
         if (uri == null) {
-            status = "Файл не выбран"
+            status = resources.getString(R.string.settingNotFile)
             return@rememberLauncherForActivityResult
         }
 
+        // Получаем имя файла через ContentResolver
         val fileName = context.getFileName(uri) ?: ""
         if (!fileName.endsWith(".task")) {
-            status = "Выбран неправильный тип файла"
+            status =  resources.getString(R.string.settingSelectedFile)
             return@rememberLauncherForActivityResult
         }
 
-        // Копируем файл во внутреннее хранилище
+        // Копируем файл из полученного URI во внутреннее хранилище приложения (context.filesDir)
         val destinationFile = File(context.filesDir, fileName)
-        context.contentResolver.openInputStream(uri)?.use { input ->
-            destinationFile.outputStream().use { output ->
-                input.copyTo(output)
+        try {
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                destinationFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
             }
+            // Отдаём полный путь во ViewModel (которая сохранит его в DataStore)
+            onModelSelected(destinationFile.absolutePath)
+            status = resources.getString(R.string.settingYesModel)
+        } catch (e: Exception) {
+            status = resources.getString(R.string.settingNoOpenFile)
         }
-
-        // Сохраняем путь к файлу
-        onModelSelected(destinationFile.absolutePath)
-        status = "Модель успешно загружена"
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(
-            onClick = {
-                launcher.launch("*/*")
-            },
+            onClick = { launcher.launch("*/*") },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
         ) {
             Text(
-                text = "Выбрать модель",
+                text = resources.getString(R.string.settingSelectedModel),
                 color = MaterialTheme.colorScheme.background
             )
         }
@@ -213,11 +211,13 @@ fun SimpleModelLoader(
 
         Text(
             text = status,
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
+            fontSize = 14.sp
         )
     }
 }
 
+// Вспомогательный метод для извлечения имени файла из Uri
 fun Context.getFileName(uri: Uri): String? {
     var name: String? = null
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
@@ -230,4 +230,3 @@ fun Context.getFileName(uri: Uri): String? {
     }
     return name
 }
-
