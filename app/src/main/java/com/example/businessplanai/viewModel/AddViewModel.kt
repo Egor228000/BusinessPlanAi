@@ -2,7 +2,6 @@ package com.example.businessplanai.viewModel
 
 import android.content.Context
 import android.util.Log
-import android.util.Log.e
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businessplanai.NetworkStatusTracker
@@ -19,8 +18,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.apache.poi.hssf.usermodel.HeaderFooter.file
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
