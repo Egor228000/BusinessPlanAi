@@ -21,6 +21,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -168,6 +169,7 @@ fun SimpleModelLoader(
 ) {
     val context = LocalContext.current
     var status by remember { mutableStateOf("") }
+    var statusCircle by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     // Ланчер для выбора любого файла (GetContent → "*/*")
@@ -189,7 +191,7 @@ fun SimpleModelLoader(
         }
 
         // Начинаем копировать: статус «Копирование…»
-
+        statusCircle = true
         status =  resources.getString(R.string.settingLoadingModel)
 
         // Копируем в фоновом потоке
@@ -213,6 +215,7 @@ fun SimpleModelLoader(
 
                     // 2) затем обновляем статус: «Модель успешно загружена»
                     status = resources.getString(R.string.settingYesModel)
+                    statusCircle = false
                 } else {
                     status = resources.getString(R.string.settingNoOpenFile)
                 }
@@ -221,22 +224,26 @@ fun SimpleModelLoader(
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(
-            onClick = { launcher.launch("*/*") },
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
-        ) {
-            Text(
-                text = resources.getString(R.string.settingSelectedModel),
-                color = MaterialTheme.colorScheme.background
-            )
+        if (!statusCircle) {
+            Button(
+                onClick = { launcher.launch("*/*") },
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onSurface)
+            ) {
+                Text(
+                    text = resources.getString(R.string.settingSelectedModel),
+                    color = MaterialTheme.colorScheme.background
+                )
+            }
+        } else {
+            CircularProgressIndicator()
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = status,
             color = MaterialTheme.colorScheme.background,
-            fontSize = 14.sp
+            fontSize = 16.sp
         )
     }
 }
